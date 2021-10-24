@@ -10,6 +10,10 @@ bool Game::isGameRunning = false;
 std::shared_ptr<Snake> snake = nullptr;
 
 
+int Game::windowWidth = 800;
+int Game::windowHeight = 640;
+
+
 
 
 Game::Game()

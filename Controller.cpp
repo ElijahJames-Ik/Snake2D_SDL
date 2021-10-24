@@ -20,6 +20,9 @@ void Controller::captureInput()
 				snakePtr->snakeDirection = Direction::UP;
 				snakePtr->snakeBody.front()->velocity.x = 0;
 				snakePtr->snakeBody.front()->velocity.y = -1;
+				snakePtr->snakeBody.front()->setTexture("assets/snake_head_up.png");
+				snakePtr->snakeBody.front()->flipTexture = SDL_FLIP_NONE;
+				
 				std::cout << "UP" << std::endl;
 			}		
 			break;
@@ -29,6 +32,8 @@ void Controller::captureInput()
 				snakePtr->snakeBody.front()->velocity.x = -1;
 				snakePtr->snakeBody.front()->velocity.y = 0;
 				std::cout << "LEFT" << std::endl;
+				snakePtr->snakeBody.front()->setTexture("assets/snake_head_left.png");
+				
 			}
 			break;
 		case SDLK_s:
@@ -36,15 +41,20 @@ void Controller::captureInput()
 				snakePtr->snakeDirection = Direction::DOWN;
 				snakePtr->snakeBody.front()->velocity.x = 0;
 				snakePtr->snakeBody.front()->velocity.y = 1;
+				snakePtr->snakeBody.front()->setTexture("assets/snake_head_down.png");
+				snakePtr->snakeBody.front()->flipTexture = SDL_FLIP_NONE;
 				std::cout << "DOWN" << std::endl;
 			}
 			break;
 		case SDLK_d:
 			if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN) {
 				snakePtr->snakeDirection = Direction::RIGHT;
-				std::cout << "RIGHT" << std::endl;
+				
 				snakePtr->snakeBody.front()->velocity.x = 1;
 				snakePtr->snakeBody.front()->velocity.y = 0;
+				snakePtr->snakeBody.front()->setTexture("assets/snake_head_right.png");
+				snakePtr->snakeBody.front()->flipTexture = SDL_FLIP_NONE;
+				std::cout << "RIGHT" << std::endl;
 			}
 			break;
 		}

@@ -14,7 +14,7 @@ void Snake::createSnake()
 	int startY = 100;
 
 	
-	snakeBody.emplace_back(std::make_unique<SnakeHead>("assets/snake_head.png", startX, startY));
+	snakeBody.emplace_back(std::make_unique<SnakeHead>("assets/snake_head_right.png", startX, startY));
 	
 	
 	for (int i = 0; i < snakeSize; i++)

@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	int frameTime;
 
     game = new Game();
-	game->init("SNAKE", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640);
+	game->init("SNAKE", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Game::windowWidth, Game::windowHeight);
 
 	while (game->isGameRunning)
 	{

@@ -19,6 +19,8 @@ public:
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
 	static bool isGameRunning;
+	static int windowWidth;
+	static int windowHeight;
 
 private:
 	SDL_Window* gameWindow;

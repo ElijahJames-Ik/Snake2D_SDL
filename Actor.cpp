@@ -1,9 +1,9 @@
 #include "Actor.h"
-#include "TextureManager.h"
+
 
 Actor::Actor(const char* textureSheet, int x, int y) {
 	actorTexture = TextureManager::loadTexture(textureSheet);
-
+	flipTexture = SDL_FLIP_NONE;
 	velocity.x = 1;
 	velocity.y = 0;
 	srcRect.h = 8;
@@ -21,4 +21,10 @@ Actor::Actor(const char* textureSheet, int x, int y) {
 Actor::~Actor()
 {
 	SDL_DestroyTexture(actorTexture);
+}
+
+
+void Actor::setTexture(const char* filePath)
+{
+	actorTexture = TextureManager::loadTexture(filePath);
 }
