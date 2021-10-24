@@ -1,13 +1,13 @@
 #pragma once
-#include "Game.h"
+
 #include "Snake.h"
 
 
 class Controller
 {
 public:
-	Controller(std::shared_ptr<Snake> snake);
-	void update();
+	Controller(std::shared_ptr<Snake> snakePtr);
+	void captureInput();
 	
 private:
 	std::shared_ptr<Snake> snakePtr;

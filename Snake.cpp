@@ -1,41 +1,48 @@
 #include "Snake.h"
+#include "Controller.h"
 
+std::unique_ptr<Controller> controller = nullptr;
 
-Snake::Snake()
+Snake::Snake(int size)
 {
-	snakeSize = 5;
+	snakeSize = size;
 }
 
 void Snake::createSnake()
 {
-	int startX = 60;
+	int startX = 10 + (snakeSize * 8);
 	int startY = 100;
+
 	
-	//std::unique_ptr<SnakeHead> head = std::make_unique<SnakeHead>("assets/snake_head.png", startX, startY);
-	//snakeBody.emplace_back(std::move(head));
-	//
-	//
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	startX -= 8;
-	//	std::unique_ptr<SnakeHead> body = std::make_unique<SnakeHead>("assets/snake_cube.png", startX, startY);
-	//	snakeBody.emplace_back(std::move(body));
-	//}
+	snakeBody.emplace_back(std::make_unique<SnakeHead>("assets/snake_head.png", startX, startY));
+	
+	
+	for (int i = 0; i < snakeSize; i++)
+	{
+		startX -= 8;
+		auto body = std::make_unique<SnakeBody>("assets/snake_cube.png", startX, startY);
+		snakeBody.emplace_back(std::move(body));
+	}
+	controller = std::make_unique<Controller>(this->shared_from_this());
+
+}
+
+
+
+void Snake::update()
+{
+	controller->captureInput();
+	for (auto it = snakeBody.begin(); it != snakeBody.end(); ++it)
+	{
+		(*it)->update();
+	}
 	
 }
 
-void Snake::setDirection(Direction direction)
+void Snake::render()
 {
-	this->snakeDirection = direction;
-}
-
-Direction Snake::getDirection()
-{
-	return snakeDirection;
-
-}
-
-void Snake::updateSnake()
-{
-
+	for (auto it = snakeBody.begin(); it != snakeBody.end(); ++it)
+	{
+		(*it)->render();
+	}
 }

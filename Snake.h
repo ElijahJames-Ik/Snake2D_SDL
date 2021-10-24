@@ -5,20 +5,25 @@
 #include <memory>
 
 using std::vector;
-using std::unique_ptr;
+
 enum class Direction { UP, DOWN, LEFT, RIGHT };
-class Snake
+class Snake : public std::enable_shared_from_this<Snake>
 {
 public:
-	Snake();
-	void createSnake();
-	void updateSnake();
-	Direction getDirection();
-	void setDirection(Direction direction);
-	vector<unique_ptr<Actor>> snakeBody;
-private:
-	int snakeSize;
+	Snake(int size);
+	
+	void update();
+	void render();
 	Direction snakeDirection = Direction::LEFT;
+	void createSnake();
+private:
+	vector<std::unique_ptr<Actor>> snakeBody;
+	int snakeSize;
+	
+
+	
+	
+	
 	
 	
 };

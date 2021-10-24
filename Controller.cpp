@@ -1,39 +1,46 @@
 #include "Controller.h"
 
 
-Controller::Controller(std::shared_ptr<Snake> snake)
+
+Controller::Controller(std::shared_ptr<Snake> snakePtr)
 {
-	snakePtr = snake;
+	this->snakePtr = snakePtr;
 }
 
-void Controller::update()
+
+
+void Controller::captureInput()
 {
 	if (Game::event.type == SDL_KEYDOWN)
 	{
 		switch (Game::event.key.keysym.sym)
 		{
 		case SDLK_w:
-			if (snakePtr->getDirection() == Direction::LEFT || snakePtr->getDirection() == Direction::RIGHT) {
-				snakePtr->setDirection(Direction::UP);
+			if (snakePtr->snakeDirection == Direction::LEFT || snakePtr->snakeDirection == Direction::RIGHT) {
+				snakePtr->snakeDirection = Direction::UP;
+				std::cout << "UP" << std::endl;
 			}		
 			break;
 		case SDLK_a:
-			if (snakePtr->getDirection() == Direction::UP || snakePtr->getDirection() == Direction::DOWN) {
-				snakePtr->setDirection(Direction::LEFT);
+			if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN) {
+				snakePtr->snakeDirection = Direction::LEFT;
+				std::cout << "LEFT" << std::endl;
 			}
 			break;
 		case SDLK_s:
-			if (snakePtr->getDirection() == Direction::LEFT || snakePtr->getDirection() == Direction::RIGHT) {
-				snakePtr->setDirection(Direction::DOWN);
+			if (snakePtr->snakeDirection == Direction::LEFT || snakePtr->snakeDirection == Direction::RIGHT) {
+				snakePtr->snakeDirection = Direction::DOWN;
+				std::cout << "DOWN" << std::endl;
 			}
 			break;
 		case SDLK_d:
-			if (snakePtr->getDirection() == Direction::UP || snakePtr->getDirection() == Direction::DOWN) {
-				snakePtr->setDirection(Direction::RIGHT);
+			if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN) {
+				snakePtr->snakeDirection = Direction::RIGHT;
+				std::cout << "RIGHT" << std::endl;
 			}
-			
 			break;
-
 		}
 	}
+
+
 }

@@ -1,12 +1,16 @@
 #include "Game.h"
 #include "Snake.h"
-#include "Controller.h"
+
+
+
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 bool Game::isGameRunning = false;
 std::shared_ptr<Snake> snake = nullptr;
-Controller* controller = nullptr;
+
+
+
 
 Game::Game()
 {
@@ -38,9 +42,10 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height)
 
 		isGameRunning = true;
 
-		snake = std::shared_ptr<Snake>();
+		snake = std::make_shared<Snake>(5);
 		snake->createSnake();
-		controller = new Controller(snake);
+		
+		
 
 		std::cout << "Snake created" << std::endl;
 	}
@@ -64,21 +69,15 @@ void Game::handleEvents()
 }
 void Game::update()
 {
-	controller->update();
-	for (auto it = snake->snakeBody.begin(); it != snake->snakeBody.end(); ++it)
-	{
-		(*it)->update();
-	}
+	
+	snake->update();
 	
 	
 }
 void Game::render()
 {
 	SDL_RenderClear(renderer);
-	for (auto it = snake->snakeBody.begin(); it != snake->snakeBody.end(); ++it)
-	{
-		(*it)->render();
-	}
+	snake->render();
 	 SDL_RenderPresent(renderer);
 }
 
