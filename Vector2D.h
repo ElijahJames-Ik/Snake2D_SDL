@@ -13,6 +13,7 @@ public:
 
 	Vector2D& operator+=(const Vector2D& vec);
 	Vector2D& operator-=(const Vector2D& vec);
+	bool operator!=(const Vector2D& vec);
 
 	void zero();
 	int x;

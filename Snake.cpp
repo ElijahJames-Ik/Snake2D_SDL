@@ -34,6 +34,22 @@ void Snake::update()
 	controller->captureInput();
 	for (auto it = snakeBody.begin(); it != snakeBody.end(); ++it)
 	{
+		if (it != snakeBody.begin())
+		{
+			if ((*it)->velocity != (*(it - 1))->velocity)
+			{
+		
+				if ((*it)->position.x == (*(it - 1))->position.x)
+				{
+					(*it)->velocity = (*(it - 1))->velocity;
+				}
+				else if ((*it)->position.y == (*(it - 1))->position.y)
+				{
+					(*it)->velocity = (*(it - 1))->velocity;
+				}
+			}
+			
+		}
 		(*it)->update();
 	}
 	

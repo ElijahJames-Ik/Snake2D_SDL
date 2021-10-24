@@ -16,8 +16,8 @@ public:
 	void render();
 	Direction snakeDirection = Direction::LEFT;
 	void createSnake();
-private:
 	vector<std::unique_ptr<Actor>> snakeBody;
+private:
 	int snakeSize;
 	
 

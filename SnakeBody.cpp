@@ -18,6 +18,18 @@ void SnakeBody::update()
 	{
 		position.x = 0;
 	}
+	if (position.x < 0)
+	{
+		position.x = 800;
+	}
+	if (position.y > 640)
+	{
+		position.y = 0;
+	}
+	if (position.y < 0)
+	{
+		position.y = 640;
+	}
 
 	
 

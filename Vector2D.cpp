@@ -53,3 +53,14 @@ void  Vector2D::zero()
 	x = 0;
 	y = 0;
 }
+bool Vector2D::operator!=(const Vector2D& vec)
+{
+	if (this->x == vec.x && this->y == vec.y)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
