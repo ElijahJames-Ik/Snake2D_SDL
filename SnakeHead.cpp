@@ -1,7 +1,7 @@
 #include "SnakeHead.h"
 
 
-SnakeHead::SnakeHead(const char* textureSheet, int x, int y) : Actor(textureSheet, x, y)
+SnakeHead::SnakeHead(const char* textureSheet, int x, int y, int width, int height) : Actor(textureSheet, x, y, width, height)
 {
 
 }
@@ -35,6 +35,5 @@ void SnakeHead::update()
 	
 }
 void SnakeHead::render() {
-	SDL_RenderCopy(Game::renderer, actorTexture, &srcRect, &destRect);
 	TextureManager::draw(actorTexture, srcRect, destRect, flipTexture);
 }

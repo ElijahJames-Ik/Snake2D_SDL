@@ -147,9 +147,11 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="FoodManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="SnakeBody.cpp" />
+    <ClCompile Include="SnakeFood.cpp" />
     <ClCompile Include="SnakeHead.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Vector2D.cpp" />
@@ -158,8 +160,10 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="FoodManager.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="SnakeBody.h" />
+    <ClInclude Include="SnakeFood.h" />
     <ClInclude Include="SnakeHead.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Vector2D.h" />

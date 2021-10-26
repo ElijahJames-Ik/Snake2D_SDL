@@ -14,13 +14,13 @@ void Snake::createSnake()
 	int startY = 100;
 
 	
-	snakeBody.emplace_back(std::make_unique<SnakeHead>("assets/snake_head_right.png", startX, startY));
+	snakeBody.emplace_back(std::make_unique<SnakeHead>("assets/snake_head_right.png", startX, startY,8,8));
 	
 	
 	for (int i = 0; i < snakeSize; i++)
 	{
 		startX -= 8;
-		auto body = std::make_unique<SnakeBody>("assets/snake_cube.png", startX, startY);
+		auto body = std::make_unique<SnakeBody>("assets/snake_cube.png", startX, startY,8,8);
 		snakeBody.emplace_back(std::move(body));
 	}
 	controller = std::make_unique<Controller>(this->shared_from_this());

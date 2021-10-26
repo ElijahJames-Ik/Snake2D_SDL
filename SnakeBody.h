@@ -5,7 +5,7 @@
 class SnakeBody : public Actor
 {
 public:
-	SnakeBody(const char* textureSheet, int x, int y);
+	SnakeBody(const char* textureSheet, int x, int y, int width, int height);
 	~SnakeBody();
 
 	void update() override;

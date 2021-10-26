@@ -2,7 +2,7 @@
 #include "Game.h"
 
 
-SnakeBody::SnakeBody(const char* textureSheet, int x, int y) : Actor(textureSheet,x,y) 
+SnakeBody::SnakeBody(const char* textureSheet, int x, int y, int width, int height) : Actor(textureSheet,x,y,width,height)
 {
 	
 }

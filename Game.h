@@ -6,6 +6,7 @@
 #include <SDL_image.h>
 
 
+
 class Game
 {
 public:
@@ -24,6 +25,7 @@ public:
 
 private:
 	SDL_Window* gameWindow;
+	
 
 	
 };

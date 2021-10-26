@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Snake.h"
+#include "FoodManager.h"
 
 
 
@@ -8,6 +9,7 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 bool Game::isGameRunning = false;
 std::shared_ptr<Snake> snake = nullptr;
+std::unique_ptr<FoodManager> food;
 
 
 int Game::windowWidth = 800;
@@ -18,7 +20,7 @@ int Game::windowHeight = 640;
 
 Game::Game()
 {
-
+	food = nullptr;
 }
 
 Game::~Game()
@@ -48,9 +50,8 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height)
 
 		snake = std::make_shared<Snake>(5);
 		snake->createSnake();
+		food = std::make_unique<FoodManager>(Game::windowWidth, Game::windowHeight);
 		
-		
-
 		std::cout << "Snake created" << std::endl;
 	}
 	else
@@ -73,16 +74,15 @@ void Game::handleEvents()
 }
 void Game::update()
 {
-	
 	snake->update();
-	
-	
+	food->update();
 }
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 	snake->render();
-	 SDL_RenderPresent(renderer);
+	food->render();
+	SDL_RenderPresent(renderer);
 }
 
 
