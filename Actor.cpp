@@ -5,8 +5,8 @@ Actor::Actor(const char* textureSheet, int x, int y, int width, int height) {
 	flipTexture = SDL_FLIP_NONE;
 	velocity.x = 1;
 	velocity.y = 0;
-	srcRect.h = width;
-	srcRect.w = height;
+	srcRect.h = height;
+	srcRect.w = width;
 	srcRect.x = 0;
 	srcRect.y = 0;
 	destRect.w = srcRect.w;

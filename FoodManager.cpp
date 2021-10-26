@@ -1,11 +1,13 @@
 #include "FoodManager.h"
+#include "Collision.h"
 #include<random>
 
-FoodManager::FoodManager(int width, int height)
+FoodManager::FoodManager(int width, int height, std::shared_ptr<Snake> snake)
 {
 	food = std::make_unique<SnakeFood>("assets/snake_food.png",0,0,16,16);
 	this->width = width;
 	this->height = height;
+	this->snake = snake;
 }
 
 void FoodManager::generateFood()
@@ -34,7 +36,15 @@ void FoodManager::generateFood()
 
 void FoodManager::update()
 {
+	//check for collision
+	if (Collision::AABB(snake->snakeBody.front()->destRect, food->destRect) == true)
+	{
+		food->isFoodEaten = true;
+		snake->growSnake();
+	}
 	generateFood();
+
+	
 }
 
 void FoodManager::render()

@@ -5,6 +5,7 @@
 
 
 
+
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 bool Game::isGameRunning = false;
@@ -50,7 +51,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height)
 
 		snake = std::make_shared<Snake>(5);
 		snake->createSnake();
-		food = std::make_unique<FoodManager>(Game::windowWidth, Game::windowHeight);
+		food = std::make_unique<FoodManager>(Game::windowWidth, Game::windowHeight, snake);
 		
 		std::cout << "Snake created" << std::endl;
 	}
@@ -76,6 +77,8 @@ void Game::update()
 {
 	snake->update();
 	food->update();
+	
+
 }
 void Game::render()
 {

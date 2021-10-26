@@ -27,6 +27,32 @@ void Snake::createSnake()
 
 }
 
+void Snake::growSnake()
+{
+	int startX = snakeBody.front()->position.x;
+	int startY = snakeBody.front()->position.y;
+	
+	switch (snakeDirection)
+	{
+	case Direction::UP:
+		snakeBody.front()->position.y += -8;
+		break;
+	case Direction::DOWN:
+		snakeBody.front()->position.y += 8;
+		break;
+	case Direction::LEFT:
+		snakeBody.front()->position.x += -8;
+		break;
+	case Direction::RIGHT:
+		snakeBody.front()->position.x += 8;
+		break;
+
+	}
+
+	auto body = std::make_unique<SnakeBody>("assets/snake_cube.png", startX, startY, 8, 8);
+	snakeBody.insert(snakeBody.begin() + 1, std::move(body));
+}
+
 
 
 void Snake::update()
