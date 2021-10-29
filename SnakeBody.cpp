@@ -21,7 +21,7 @@ void SnakeBody::update()
 	}
 	if (position.x < 0)
 	{
-		position.x = Game::windowWidth;
+		position.x = Game::windowWidth - 8;
 	}
 	if (position.y > Game::windowHeight)
 	{
@@ -29,7 +29,7 @@ void SnakeBody::update()
 	}
 	if (position.y < 0)
 	{
-		position.y = Game::windowHeight;
+		position.y = Game::windowHeight - 8;
 	}
 
 	
@@ -39,5 +39,5 @@ void SnakeBody::update()
 	
 }
 void SnakeBody::render() {
-	TextureManager::draw(actorTexture, srcRect, destRect, flipTexture);
+	TextureManager::render(actorTexture, srcRect, destRect, flipTexture);
 }

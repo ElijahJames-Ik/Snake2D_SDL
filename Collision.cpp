@@ -7,3 +7,4 @@ bool Collision::AABB(const SDL_Rect& objectA, const SDL_Rect& objectB)
 		return true;
 	}
 }
+

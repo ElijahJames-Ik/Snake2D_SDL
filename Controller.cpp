@@ -7,58 +7,83 @@ Controller::Controller(std::shared_ptr<Snake> snakePtr)
 	this->snakePtr = snakePtr;
 }
 
+Controller::~Controller()
+{
+	
+}
 
+void Controller::up()
+{
+	if (snakePtr->snakeDirection == Direction::LEFT || snakePtr->snakeDirection == Direction::RIGHT && (*(snakePtr->snakeBody.begin()))->velocity == (*(snakePtr->snakeBody.begin()+1))->velocity) {
+		snakePtr->snakeDirection = Direction::UP;
+		snakePtr->snakeBody.front()->velocity.x = 0;
+		snakePtr->snakeBody.front()->velocity.y = -1;
+		snakePtr->snakeBody.front()->setTexture("assets/snake_head_up.png");
+		std::cout << "UP" << std::endl;
+		snakePtr->update();
+		
+	}
+}
+
+void Controller::down()
+{
+	// Change snake head direction to 
+	if (snakePtr->snakeDirection == Direction::LEFT || snakePtr->snakeDirection == Direction::RIGHT && (*(snakePtr->snakeBody.begin()))->velocity == (*(snakePtr->snakeBody.begin()+1))->velocity) {
+		snakePtr->snakeDirection = Direction::DOWN;
+		snakePtr->snakeBody.front()->setTexture("assets/snake_head_down.png");
+		snakePtr->snakeBody.front()->velocity.x = 0;
+		snakePtr->snakeBody.front()->velocity.y = 1;
+		std::cout << "DOWN" << std::endl;
+		snakePtr->update();
+	}
+}
+
+void Controller::left()
+{
+	if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN && (*(snakePtr->snakeBody.begin()))->velocity == (*(snakePtr->snakeBody.begin()+1))->velocity) {
+		snakePtr->snakeDirection = Direction::LEFT;
+		snakePtr->snakeBody.front()->setTexture("assets/snake_head_left.png");
+		snakePtr->snakeBody.front()->velocity.x = -1;
+		snakePtr->snakeBody.front()->velocity.y = 0;
+		std::cout << "LEFT" << std::endl;
+		snakePtr->update();
+
+	}
+}
+
+void Controller::right()
+{
+	if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN && (*(snakePtr->snakeBody.begin()))->velocity == (*(snakePtr->snakeBody.begin() + 1))->velocity) {
+		snakePtr->snakeDirection = Direction::RIGHT;
+		snakePtr->snakeBody.front()->setTexture("assets/snake_head_right.png");
+		snakePtr->snakeBody.front()->velocity.x = 1;
+		snakePtr->snakeBody.front()->velocity.y = 0;
+		std::cout << "RIGHT" << std::endl;
+		snakePtr->update();
+	}
+}
 
 void Controller::captureInput()
 {
-	if (Game::event.type == SDL_KEYDOWN)
+	if (snakePtr->isSnakeDead == false)
 	{
-		switch (Game::event.key.keysym.sym)
+		if (keyBoardState[SDL_SCANCODE_W])
 		{
-		case SDLK_w:
-			if (snakePtr->snakeDirection == Direction::LEFT || snakePtr->snakeDirection == Direction::RIGHT) {
-				snakePtr->snakeDirection = Direction::UP;
-				snakePtr->snakeBody.front()->velocity.x = 0;
-				snakePtr->snakeBody.front()->velocity.y = -1;
-				snakePtr->snakeBody.front()->setTexture("assets/snake_head_up.png");
-				snakePtr->snakeBody.front()->flipTexture = SDL_FLIP_NONE;
-				
-				std::cout << "UP" << std::endl;
-			}		
-			break;
-		case SDLK_a:
-			if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN) {
-				snakePtr->snakeDirection = Direction::LEFT;
-				snakePtr->snakeBody.front()->velocity.x = -1;
-				snakePtr->snakeBody.front()->velocity.y = 0;
-				std::cout << "LEFT" << std::endl;
-				snakePtr->snakeBody.front()->setTexture("assets/snake_head_left.png");
-				
-			}
-			break;
-		case SDLK_s:
-			if (snakePtr->snakeDirection == Direction::LEFT || snakePtr->snakeDirection == Direction::RIGHT) {
-				snakePtr->snakeDirection = Direction::DOWN;
-				snakePtr->snakeBody.front()->velocity.x = 0;
-				snakePtr->snakeBody.front()->velocity.y = 1;
-				snakePtr->snakeBody.front()->setTexture("assets/snake_head_down.png");
-				snakePtr->snakeBody.front()->flipTexture = SDL_FLIP_NONE;
-				std::cout << "DOWN" << std::endl;
-			}
-			break;
-		case SDLK_d:
-			if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN) {
-				snakePtr->snakeDirection = Direction::RIGHT;
-				
-				snakePtr->snakeBody.front()->velocity.x = 1;
-				snakePtr->snakeBody.front()->velocity.y = 0;
-				snakePtr->snakeBody.front()->setTexture("assets/snake_head_right.png");
-				snakePtr->snakeBody.front()->flipTexture = SDL_FLIP_NONE;
-				std::cout << "RIGHT" << std::endl;
-			}
-			break;
+			up();
+		}
+		else if (keyBoardState[SDL_SCANCODE_A])
+		{
+			left();
+		}
+		else if (keyBoardState[SDL_SCANCODE_S])
+		{
+			down();
+		}
+		else if (keyBoardState[SDL_SCANCODE_D])
+		{
+			right();
 		}
 	}
-
-
+	
+	
 }

@@ -38,6 +38,16 @@ Vector2D& Vector2D::operator-=(const Vector2D& vector)
 	return substract(vector);
 }
 
+bool Vector2D::operator==(const Vector2D& vector)
+{
+	if (x == vector.x && y == vector.y)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 Vector2D& operator+(Vector2D& v1, const Vector2D& v2)
 {
 	return v1.add(v2);

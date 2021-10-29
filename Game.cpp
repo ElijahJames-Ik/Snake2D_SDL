@@ -1,16 +1,18 @@
 #include "Game.h"
 #include "Snake.h"
 #include "FoodManager.h"
+#include "WorldMap.h"
 
 
 
 
-
+const char* tileMapFile = "assets/defaultMap.txt";
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 bool Game::isGameRunning = false;
 std::shared_ptr<Snake> snake = nullptr;
 std::unique_ptr<FoodManager> food;
+std::unique_ptr<WorldMap> background = nullptr;
 
 
 int Game::windowWidth = 800;
@@ -54,6 +56,8 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height)
 		food = std::make_unique<FoodManager>(Game::windowWidth, Game::windowHeight, snake);
 		
 		std::cout << "Snake created" << std::endl;
+		background = std::make_unique<WorldMap>();
+		background->LoadWorldMap(tileMapFile, 25, 20);
 	}
 	else
 	{
@@ -82,9 +86,15 @@ void Game::update()
 }
 void Game::render()
 {
+	
 	SDL_RenderClear(renderer);
-	snake->render();
-	food->render();
+	if (!snake->isSnakeDead)
+	{
+		background->render();
+		snake->render();
+		food->render();
+	}
+	
 	SDL_RenderPresent(renderer);
 }
 

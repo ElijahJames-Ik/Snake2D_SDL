@@ -153,9 +153,10 @@
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="SnakeBody.cpp" />
     <ClCompile Include="SnakeFood.cpp" />
-    <ClCompile Include="SnakeHead.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Vector2D.cpp" />
+    <ClCompile Include="WorldMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
@@ -166,9 +167,11 @@
     <ClInclude Include="Snake.h" />
     <ClInclude Include="SnakeBody.h" />
     <ClInclude Include="SnakeFood.h" />
-    <ClInclude Include="SnakeHead.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="WorldMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

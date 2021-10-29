@@ -1,6 +1,5 @@
 #pragma once
 #include "SnakeBody.h"
-#include "SnakeHead.h"
 #include <vector>
 #include <memory>
 
@@ -17,9 +16,11 @@ public:
 	Direction snakeDirection = Direction::LEFT;
 	void createSnake();
 	void growSnake();
+	bool isSnakeDead = false;
 	vector<std::unique_ptr<Actor>> snakeBody;
 private:
 	int snakeSize;
+	
 	
 	
 

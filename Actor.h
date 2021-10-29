@@ -3,6 +3,7 @@
 #include "Vector2D.h"
 #include "TextureManager.h"
 
+
 class Actor {
 public: 
 	Actor(const char* textureSheet, int x, int y, int width, int height);
@@ -17,4 +18,7 @@ public:
 	SDL_RendererFlip flipTexture;
 	SDL_Texture* actorTexture;
 	SDL_Rect srcRect, destRect;
+	int width;
+	int height;
+	
 };

@@ -33,9 +33,6 @@
     <ClCompile Include="SnakeBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SnakeHead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -49,6 +46,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,9 +71,6 @@
     <ClInclude Include="SnakeBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SnakeHead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -84,6 +84,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

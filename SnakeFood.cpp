@@ -17,5 +17,5 @@ void SnakeFood::update()
 }
 void SnakeFood::render() 
 {
-	TextureManager::draw(actorTexture, srcRect, destRect, flipTexture);
+	TextureManager::render(actorTexture, srcRect, destRect, flipTexture);
 }
