@@ -16,5 +16,6 @@ private:
 	void down();
 	void right();
 	void left();
+	void moveSnake(const char* texture, int x, int y, const char* directionStr, Direction direction);
 	
 };

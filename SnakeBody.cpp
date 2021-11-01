@@ -39,5 +39,5 @@ void SnakeBody::update()
 	
 }
 void SnakeBody::render() {
-	TextureManager::render(actorTexture, srcRect, destRect, flipTexture);
+	TextureManager::render(actorTexture, destRect, flipTexture);
 }

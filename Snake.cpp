@@ -1,8 +1,9 @@
 #include "Snake.h"
-#include "Controller.h"
 #include "Collision.h"
+#include "GlobalData.h"
 
-std::unique_ptr<Controller> controller = nullptr;
+
+
 const int bodyWidth = 8;
 const int bodyHeight = 8;
 
@@ -14,8 +15,11 @@ Snake::Snake(int size)
 void Snake::createSnake()
 {
 	int startX = 10 + (snakeSize * 8);
-	int startY = 100;
+	int startY = Game::windowHeight/2 - 4;
 
+	snakeBody.clear();
+	snakeDirection = Direction::RIGHT;
+	isSnakeDead = false;
 	
 	snakeBody.emplace_back(std::make_unique<SnakeBody>("assets/snake_head_right.png", startX, startY, bodyWidth, bodyHeight));
 	
@@ -26,12 +30,13 @@ void Snake::createSnake()
 		auto body = std::make_unique<SnakeBody>("assets/snake_cube.png", startX, startY, bodyWidth, bodyHeight);
 		snakeBody.emplace_back(std::move(body));
 	}
-	controller = std::make_unique<Controller>(this->shared_from_this());
+	
 
 }
 
 void Snake::growSnake()
 {
+	score += 5;
 	int startX = snakeBody.front()->position.x;
 	int startY = snakeBody.front()->position.y;
 	
@@ -56,16 +61,30 @@ void Snake::growSnake()
 	snakeBody.insert(snakeBody.begin() + 1, std::move(body));
 }
 
+int Snake::getScore()
+{
+	return score;
+}
+
+void Snake::pauseSnake()
+{
+	isGamePaused = true;
+	pausedState = snakeBody.front()->velocity;
+	snakeBody.front()->velocity = Vector2D();
+}
+
+void Snake::resumeSnake()
+{
+	isGamePaused = false;
+	snakeBody.front()->velocity = pausedState;
+}
+
 
 
 void Snake::update()
 {
 	if (isSnakeDead == false)
 	{
-	
-		// capture keyboard input
-		controller->captureInput();
-
 		//update snake 
 		for (auto it = snakeBody.begin(); it != snakeBody.end(); it++)
 		{
@@ -97,6 +116,8 @@ void Snake::update()
 				(*snakeBody.begin())->velocity.x = 0;
 				(*snakeBody.begin())->velocity.y = 0;
 				isSnakeDead = true;
+				GlobalData::currentPage = GamePage::GAMEOVER;
+				GlobalData::currentMenuSelection = 1;	
 			}
 		}
 

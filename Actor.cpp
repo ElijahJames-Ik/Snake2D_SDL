@@ -11,6 +11,8 @@ Actor::Actor(const char* textureSheet, int x, int y, int width, int height) {
 	srcRect.y = 0;
 	destRect.w = srcRect.w;
 	destRect.h = srcRect.h;
+	destRect.x = x;
+	destRect.y = y;
 
 	position.x = x;
 	position.y = y;
@@ -27,5 +29,9 @@ Actor::~Actor()
 
 void Actor::setTexture(const char* filePath)
 {
+	if (actorTexture != NULL)
+	{
+		SDL_DestroyTexture(actorTexture);
+	}
 	actorTexture = TextureManager::loadTexture(filePath);
 }

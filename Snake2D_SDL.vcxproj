@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Users\ikpem\Downloads\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\lib\x64;C:\vs_cpp_libraries\SDL2-devel-2.0.16-VC\SDL2-2.0.16\lib\x64;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\ikpem\Downloads\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\include;C:\vs_cpp_libraries\SDL2-devel-2.0.16-VC\SDL2-2.0.16\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\ikpem\Downloads\SDL2_ttf-devel-2.0.15-VC\SDL2_ttf-2.0.15\lib\x64;C:\Users\ikpem\Downloads\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\lib\x64;C:\vs_cpp_libraries\SDL2-devel-2.0.16-VC\SDL2-2.0.16\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\ikpem\Downloads\SDL2_ttf-devel-2.0.15-VC\SDL2_ttf-2.0.15\include;C:\Users\ikpem\Downloads\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\include;C:\vs_cpp_libraries\SDL2-devel-2.0.16-VC\SDL2-2.0.16\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -118,13 +118,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\ikpem\Downloads\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\include;C:\vs_cpp_libraries\SDL2-devel-2.0.16-VC\SDL2-2.0.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ikpem\Downloads\SDL2_ttf-devel-2.0.15-VC\SDL2_ttf-2.0.15\include;C:\Users\ikpem\Downloads\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\include;C:\vs_cpp_libraries\SDL2-devel-2.0.16-VC\SDL2-2.0.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vs_cpp_libraries\SDL2-devel-2.0.16-VC\SDL2-2.0.16\lib\x64;C:\Users\ikpem\Downloads\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\ikpem\Downloads\SDL2_ttf-devel-2.0.15-VC\SDL2_ttf-2.0.15\lib\x64;C:\vs_cpp_libraries\SDL2-devel-2.0.16-VC\SDL2-2.0.16\lib\x64;C:\Users\ikpem\Downloads\SDL2_image-devel-2.0.5-VC\SDL2_image-2.0.5\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,10 +149,15 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="FoodManager.cpp" />
+    <ClCompile Include="GameOverPage.cpp" />
+    <ClCompile Include="GamePauseMenu.cpp" />
+    <ClCompile Include="GlobalData.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenuPage.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="SnakeBody.cpp" />
     <ClCompile Include="SnakeFood.cpp" />
+    <ClCompile Include="TextObject.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Vector2D.cpp" />
@@ -164,10 +169,14 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="FoodManager.h" />
+    <ClInclude Include="GameOverPage.h" />
+    <ClInclude Include="GamePauseMenu.h" />
+    <ClInclude Include="GlobalData.h" />
+    <ClInclude Include="MainMenuPage.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="SnakeBody.h" />
     <ClInclude Include="SnakeFood.h" />
-    <ClInclude Include="TextRenderer.h" />
+    <ClInclude Include="TextObject.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Vector2D.h" />
