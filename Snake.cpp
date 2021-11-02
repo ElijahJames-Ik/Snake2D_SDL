@@ -34,6 +34,11 @@ void Snake::createSnake()
 
 }
 
+void Snake::addBonus(int bonus)
+{
+	score += bonus;
+}
+
 void Snake::growSnake()
 {
 	score += 5;

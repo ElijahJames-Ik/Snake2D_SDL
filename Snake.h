@@ -17,6 +17,7 @@ public:
 	Direction snakeDirection = Direction::LEFT;
 	void createSnake();
 	void growSnake();
+	void addBonus(int bonus);
 	void pauseSnake();
 	void resumeSnake();
 	int getScore();
