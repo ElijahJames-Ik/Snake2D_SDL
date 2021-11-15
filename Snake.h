@@ -22,10 +22,6 @@ public:
 	void pauseSnake();
 	void resumeSnake();
 	void updateSnakeBody();
-	void updateHead();
-	void updateSnake();
-	void checkIfSnakeBitItsSelf();
-	void updateBody(std::unique_ptr<SnakeBody>&& body);
 	int getScore();
 
 	bool isSnakeDead = false;

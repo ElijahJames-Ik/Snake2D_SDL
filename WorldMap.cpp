@@ -48,6 +48,7 @@ void WorldMap::LoadWorldMap(std::string& path, int tilesX, int tilesY)
 		if (mapFile.peek() != EOF)
 		{
 			mapFile.ignore();
+			// Loaded collision locations on map
 			for (int y = 0; y < tilesY; y++)
 			{
 				std::getline(mapFile, line);

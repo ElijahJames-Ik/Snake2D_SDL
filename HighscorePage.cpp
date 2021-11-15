@@ -14,6 +14,7 @@ HighscorePage::HighscorePage(GamePage pageType): Page(pageType)
 	highscore = provider.getGameData(GlobalData::highscoreFile, provider.highscoreData);
 }
 
+// create highscore page
 void HighscorePage::initPage()
 {
 	int height = 140;

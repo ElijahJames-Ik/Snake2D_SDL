@@ -54,6 +54,10 @@ Game::Game()
 
 Game::~Game()
 {
+	if (readGameFiles.joinable())
+	{
+		readGameFiles.join();
+	}
 	SDL_DestroyWindow(gameWindow);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
@@ -88,33 +92,19 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height)
 		}
 
 		isGameRunning = true;
-
+		// read game settings from file
 		readGameFiles = std::thread([this]() {
 
 			DataProvider provider;
 			gameData = provider.getGameData(GlobalData::gameSettingsFile, provider.gameData);	
 		});
-
+		// create snake of length 5
 		snake = std::make_shared<Snake>(5);
 		food = std::make_unique<FoodManager>(Game::windowWidth, Game::windowHeight, snake);
 		std::cout << "Snake created" << std::endl;
+		// create background map
 		background = std::make_unique<WorldMap>();
 		readGameFiles.join();
-
-		// load game data
-		/*if (gameData[0] == 0)
-		{
-			GlobalData::currentGameMap = MapType::OPEN_FIELD;
-			GlobalData::worldMapTexture = GlobalData::openFieldTexture;
-			GlobalData::tileMapFile = GlobalData::openFileMapFile;
-		}
-		else
-		{
-			GlobalData::currentGameMap = MapType::BOXED_IN;
-			GlobalData::worldMapTexture = GlobalData::boxedInFieldTexture;
-			GlobalData::tileMapFile = GlobalData::boxedInFileMapFile;
-		}*/
-		
 		controller = std::make_unique<Controller>(snake);
 		pages.front()->initPage();
 				
@@ -147,6 +137,7 @@ void Game::update()
 		{
 			snake->update();
 			food->update();
+			// check if snake head collides with the map if it's boxed in
 			if (GlobalData::currentGameMap == MapType::BOXED_IN)
 			{
 				if (background->collisionBoxes.size() > 0 && !snake->isSnakeDead)
@@ -185,6 +176,7 @@ void Game::update()
 
 	for (auto itr = pages.begin(); itr != pages.end(); itr++)
 	{
+		// update current screen
 		if ((*itr)->pageType == GlobalData::currentPage)
 		{
 			if ((*itr)->isInitialized)
@@ -197,6 +189,7 @@ void Game::update()
 				}
 				else if ((*itr)->pageType == GamePage::HOME)
 				{
+					//Load game data
 					if (GlobalData::isDataLoadRequired)
 					{
 						auto tmpPtr = static_cast<MainMenuPage*>((*itr).get());

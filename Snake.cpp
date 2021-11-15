@@ -3,63 +3,7 @@
 #include "GlobalData.h"
 
 
-void Snake::updateSnake()
-{
 
-	int prev_x = snakeBody.front()->position.x;
-	int prev_y = snakeBody.front()->position.y;
-	updateHead();
-	int current_x = snakeBody.front()->position.x;
-	int current_y = snakeBody.front()->position.y;
-	std::cout << current_x << " " << prev_x << std::endl;
-	if (current_x != prev_x || current_y != prev_y)
-	{
-		updateBody(std::make_unique<SnakeBody>(GlobalData::snakeBodyTexture.c_str(), prev_x, prev_y, GlobalData::bodyWidth, GlobalData::bodyHeight));
-
-	}
-}
-
-void Snake::updateBody(std::unique_ptr<SnakeBody>&& body)
-{
-	snakeBody.emplace_back(std::move(body));
-
-	if (!isSnakeGrowing)
-	{
-		snakeBody.erase(snakeBody.end()-1);
-	}
-	else {
-		isSnakeGrowing = false;
-		score += 5;
-	}
-
-	checkIfSnakeBitItsSelf();
-	
-}
-
-void Snake::updateHead()
-{
-	snakeBody.front()->update();
-}
-
-void Snake::checkIfSnakeBitItsSelf()
-{
-	for (auto itr = snakeBody.begin() + 1; itr != snakeBody.end(); itr++)
-	{
-		if (Collision::AABB(snakeBody.front()->destRect, (*itr)->destRect) == true)
-		{
-			std::cout << "Snake is dead" << std::endl;
-			std::cout << "X:" << snakeBody.front()->position.x << "|" << (*itr)->position.x << std::endl;
-			std::cout << "Y:" << snakeBody.front()->position.y << "|" << (*itr)->position.y << std::endl;
-			(*snakeBody.begin())->velocity.x = 0;
-			(*snakeBody.begin())->velocity.y = 0;
-			isSnakeDead = true;
-			GlobalData::currentPage = GamePage::GAMEOVER;
-			GlobalData::currentMenuSelection = 1;
-			GlobalData::menuOptionChanged = true;
-			break;
-		}
-	}
-}
 
 
 Snake::Snake(int size)

@@ -12,7 +12,7 @@ GameSettingsPage::GameSettingsPage(GamePage pageType): Page(pageType)
 {
 	
 }
-
+// creae game settings screen
 void GameSettingsPage::initPage()
 {
 	int height = 140;

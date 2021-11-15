@@ -14,7 +14,7 @@ Controller::~Controller()
 	
 }
 
-
+//Change snake head direction
 void Controller::moveSnake(const char* texture,int x, int y, const char* directionStr, Direction direction)
 {
 	
@@ -22,23 +22,17 @@ void Controller::moveSnake(const char* texture,int x, int y, const char* directi
 	{
 		snakeHeadLocation = snakePtr->snakeBody.front()->position;
 		snakePtr->snakeBody.front()->setTexture(texture);
-		snakePtr->prevDirection = snakePtr->snakeDirection;
-		snakePtr->prevVector = snakePtr->snakeBody.front()->velocity;
+		//snakePtr->prevDirection = snakePtr->snakeDirection;
+		//snakePtr->prevVector = snakePtr->snakeBody.front()->velocity;
 		snakePtr->snakeDirection = direction;
 		snakePtr->snakeBody.front()->velocity.x = x;
 		snakePtr->snakeBody.front()->velocity.y = y;
-		snakePtr->movementStack.emplace_back(Vector2D(x,y));
-		std::cout << directionStr << std::endl;	
-		
-		
+		snakePtr->movementStack.emplace_back(Vector2D(x,y));	
 	}
-	
-
-	// lock move by comparing current location to pass location
-
 	
 }
 
+// handles enter key operation for gameover screen
 void Controller::gameOverEnterOperation()
 {
 	switch (GlobalData::currentMenuSelection)
@@ -63,6 +57,7 @@ void Controller::gameOverEnterOperation()
 	}
 }
 
+// handles enter key operation for home screen
 void Controller::homeEnterOperation()
 {
 	switch (GlobalData::currentMenuSelection)
@@ -92,6 +87,7 @@ void Controller::homeEnterOperation()
 	}
 }
 
+// handles escape key operation for highscore screen
 void Controller::highscoreEscapeOperation()
 {
 	GlobalData::currentPage = GamePage::HOME;
@@ -100,6 +96,7 @@ void Controller::highscoreEscapeOperation()
 	GlobalData::isControllerLocked = true;
 }
 
+// handles enter key operation for settings screen
 void Controller::settingsEnterOperation()
 {
 	switch (GlobalData::currentMenuSelection)
@@ -123,6 +120,7 @@ void Controller::settingsEnterOperation()
 	}
 }
 
+// handles escape key operation for settings screen
 void Controller::settingsEscapeOperation()
 {
 	GlobalData::currentPage = GamePage::HOME;
@@ -131,6 +129,7 @@ void Controller::settingsEscapeOperation()
 	GlobalData::isControllerLocked = true;
 }
 
+// handles enter key operation for change game map screen
 void Controller::changeSettingsEnterOperation()
 {
 	if (GlobalData::currentMenuSelection > 0)
@@ -140,6 +139,7 @@ void Controller::changeSettingsEnterOperation()
 	}
 }
 
+// handles escape key operation for change game map screen
 void Controller::changeSettingsEscapeOperation()
 {
 	GlobalData::currentPage = GamePage::SETTINGS;
@@ -148,6 +148,7 @@ void Controller::changeSettingsEscapeOperation()
 	GlobalData::isControllerLocked = true;
 }
 
+// handles snake movement
 void Controller::snakeNavigation()
 {
 		if (!snakePtr->isSnakeDead && !snakePtr->isGamePaused)
@@ -225,12 +226,14 @@ void Controller::snakeNavigation()
 	
 }
 
+// handles escape key operation for difficulty settings page
 void Controller::difficultyEscapeOperation()
 {
 	GlobalData::currentPage = GamePage::SETTINGS;
 	GlobalData::isControllerLocked = true;
 }
 
+// handles enter key operation for paused menu screen
 void Controller::snakePausedMenuEnterOperation()
 {
 	switch (GlobalData::currentMenuSelection)
@@ -255,6 +258,7 @@ void Controller::snakePausedMenuEnterOperation()
 	}
 }
 
+// handles menu navigation for all screens with options
 void Controller::menuNavigation(int menuItems)
 {
 	if (Game::event.type == SDL_KEYDOWN)
@@ -364,6 +368,7 @@ void Controller::menuNavigation(int menuItems)
 	}
 }
 
+// change snake head direction to up
 void Controller::up()
 {
 	//Change snake direction to up if the conditions are met
@@ -377,6 +382,7 @@ void Controller::up()
 	}
 }
 
+// change snake head direction to down
 void Controller::down()
 {
 	// Change snake head direction to down and changes snake head velocity
@@ -389,6 +395,7 @@ void Controller::down()
 	}
 }
 
+// change snake head direction to left
 void Controller::left()
 {
 	// Change snake head direction to left and changes snake head velocity
@@ -401,6 +408,7 @@ void Controller::left()
 	}
 }
 
+// change snake head direction to right
 void Controller::right()
 {
 	// Change snake head direction to right and changes snake head velocity
@@ -413,6 +421,7 @@ void Controller::right()
 	}
 }
 
+// handle game inputs
 void Controller::captureInput()
 {
 	

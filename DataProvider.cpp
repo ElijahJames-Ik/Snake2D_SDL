@@ -19,12 +19,14 @@
 		};
 	}
 
+	// check if file exists function
 	bool DataProvider::doesFileExist(const std::string& path)
 	{
 		std::ifstream file(path.c_str());
 		return file.good();
 	}
 
+	// create a new file
 	void DataProvider::createFile(const std::string& path)
 	{
 		std::ofstream outfile(path);
@@ -32,6 +34,7 @@
  
 	}
 
+	// create game data to file
 	void DataProvider::writeData(const std::string& path, std::vector<std::string>& data)
 	{
 		std::ofstream file;
@@ -47,6 +50,7 @@
 		}
 	}
 
+	// get game data from file
 	std::vector<int> DataProvider::getGameData(const std::string& path, std::vector<std::string>& data)
 	{
 		if (!doesFileExist(path))

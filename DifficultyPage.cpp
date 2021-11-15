@@ -15,6 +15,7 @@ DifficultyPage::DifficultyPage(GamePage pageType): Page(pageType)
 	gameSettings = provider.getGameData(GlobalData::highscoreFile, provider.gameData);
 }
 
+// create difficult screen
 void DifficultyPage::initPage()
 {
 	int height = 140;
@@ -44,6 +45,7 @@ void DifficultyPage::initPage()
 
 }
 
+// update  difficult screen
 void DifficultyPage::update()
 {
 	if (GlobalData::menuOptionChanged == true)
@@ -72,6 +74,7 @@ void DifficultyPage::update()
 	}
 }
 
+// draw difficult screen
 void DifficultyPage::render()
 {
 	for (auto itr = pageText.begin(); itr != pageText.end(); itr++)

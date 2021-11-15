@@ -11,6 +11,7 @@ MainMenuPage::MainMenuPage(GamePage pageType) : Page(pageType)
 {
 }
 
+// create home screen
 void MainMenuPage::initPage()
 {
 	//create texts for home page

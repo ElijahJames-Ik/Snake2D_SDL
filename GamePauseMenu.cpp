@@ -5,7 +5,7 @@
 
 
 
-
+// create pause menu box
 GamePauseMenu::GamePauseMenu(int xPos, int yPos, int width, int height)
 {
 	menuBackgroundRect.x = xPos;

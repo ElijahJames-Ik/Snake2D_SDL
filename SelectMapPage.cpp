@@ -14,6 +14,7 @@ SelectMapPage::SelectMapPage(GamePage pageType) : Page(pageType)
 	
 }
 
+// create select map screen
 void SelectMapPage::initPage()
 {
 	gameSettings = provider.getGameData(GlobalData::gameSettingsFile, provider.gameData);
@@ -58,6 +59,7 @@ void SelectMapPage::update()
 				"Map=" + type,
 				"Difficult=" + level
 			};
+			// update game settings file
 			provider.writeData(GlobalData::gameSettingsFile, provider.gameData);
 			this->setItemText(GlobalData::currentMenuSelection == 1 ? "Open Field" : "Boxed In", 4, GlobalData::green);
 			GlobalData::settingsChanged = false;

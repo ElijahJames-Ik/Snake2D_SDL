@@ -7,7 +7,7 @@ Page::Page(GamePage pageType)
 	this->pageType = pageType;
 	this->isInitialized = false;
 }
-
+// change text on screen
 void Page::setItemText(std::string str, int itemIndex, SDL_Color color)
 {
 	this->str = str;

@@ -12,7 +12,7 @@ GameOverPage::GameOverPage(std::string score, GamePage pageType): Page(pageType)
 	this->str = score;
 }
 
-
+// create gameover screen
 void GameOverPage::initPage()
 {
 	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 50, GlobalData::white, "Game Over", 250, 170, 300, 100));

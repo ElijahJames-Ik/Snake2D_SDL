@@ -24,6 +24,7 @@ FoodManager::~FoodManager()
 	
 }
 
+// generate snake food
 void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, int foodHeight )
 {
 	if (foodPtr->isFoodEaten)
@@ -46,6 +47,7 @@ void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, in
 			bool collision = false;
 			for (auto itr = snake->snakeBody.begin(); itr != snake->snakeBody.end(); itr++)
 			{
+				// check if new food location collides with snake body
 				if (Collision::AABB((*itr)->destRect, newPosition) == true)
 				{
 					collision = true;
@@ -77,12 +79,13 @@ void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, in
 	}
 }
 
+// generate snake food
 void FoodManager::generateFood()
 {
-	
 	generate(food, GlobalData::foodWidth, GlobalData::foodHeight);
 }
 
+// generate snake bonus food
 void FoodManager::generateBonus()
 {
 	if (timerThread.joinable())
@@ -103,7 +106,7 @@ void FoodManager::generateBonus()
 
 void FoodManager::update()
 {
-	//check for collision
+	//check if snake head collides with snake food.
 	if (Collision::AABB(snake->snakeBody.front()->destRect, food->destRect) == true)
 	{
 		food->isFoodEaten = true;
@@ -111,6 +114,7 @@ void FoodManager::update()
 		currentCount++;
 		std::cout << "Snake Food Eaten" << std::endl;
 	}
+	// check if snake head collides with snake bonus when it's visible
 	if (Collision::AABB(snake->snakeBody.front()->destRect, bonus->destRect) == true && isBonusVisible)
 	{
 		bonus->isFoodEaten = true;

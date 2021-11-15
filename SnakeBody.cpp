@@ -12,6 +12,7 @@ SnakeBody::~SnakeBody()
 
 }
 
+//update snake body part location
 void SnakeBody::update()
 {
 	position.x += velocity.x * speed;
@@ -38,8 +39,7 @@ void SnakeBody::update()
 
 	destRect.x = position.x;
 	destRect.y = position.y;
-	/*destRect.x = fmod(position.x + Game::windowWidth, Game::windowWidth);
-	destRect.y = fmod(position.y + Game::windowHeight, Game::windowHeight);*/
+
 	
 }
 void SnakeBody::render() {
