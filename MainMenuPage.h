@@ -2,15 +2,15 @@
 #include<vector>
 #include<memory>
 #include "TextObject.h"
+#include "Page.h"
 
-class MainMenuPage
+class MainMenuPage : public Page
 {
 public:
-	MainMenuPage();
-	~MainMenuPage();
-	void render();
-	void update();
-	void initData();
-
+	MainMenuPage(GamePage pageType);
+	void render() override;
+	void update() override;
+	void initPage() override;
+	void loadGameData();
 	
 };

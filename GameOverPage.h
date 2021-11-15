@@ -1,11 +1,13 @@
 #pragma once
+#include "Page.h"
+#include <string>
 
-
-class GameOverPage
+class GameOverPage : public Page
 {
 public:
-	GameOverPage();
-	void update();
-	void render();
-	void initData(const char* score);
+	GameOverPage(std::string score, GamePage pageType);
+	void update() override;
+	void render() override;
+	void initPage() override;
+
 };

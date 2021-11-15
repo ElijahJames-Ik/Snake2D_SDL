@@ -10,5 +10,9 @@ public:
 
 	void update() override;
 	void render() override;
+	void pauseMovement();
+	void resumeMovement();
+private:
+	Vector2D pausedState;
 	
 };

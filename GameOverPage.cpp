@@ -5,36 +5,38 @@
 
 #include "TextObject.h"
 
-std::vector<std::unique_ptr<TextObject>> gameOverTexts;
 
-GameOverPage::GameOverPage()
+
+GameOverPage::GameOverPage(std::string score, GamePage pageType): Page(pageType)
 {
-
+	this->str = score;
 }
 
-void GameOverPage::initData(const char* score)
+
+void GameOverPage::initPage()
 {
-	gameOverTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 50, GlobalData::white, "Game Over", 250, 170, 300, 100));
-	gameOverTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, score, 300, 280, 200, 50));
-	gameOverTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::red, "1-Play Again", 350, 340, 100, 25));
-	gameOverTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "2-Main Menu", 350, 370, 100, 25));
-	gameOverTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "3-Exit", 350, 400, 100, 25));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 50, GlobalData::white, "Game Over", 250, 170, 300, 100));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, str, 300, 280, 200, 50));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::red, "Play Again", 350, 340, 100, 25));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Main Menu", 350, 370, 100, 25));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Exit", 350, 400, 100, 25));
+	isInitialized = true;
 }
 
 void GameOverPage::update()
 {
 	if (GlobalData::menuOptionChanged == true)
 	{
-		(*(gameOverTexts.begin() + 2))->setColor(GlobalData::currentMenuSelection == 1 ? GlobalData::red : GlobalData::white);
-		(*(gameOverTexts.begin() + 3))->setColor(GlobalData::currentMenuSelection == 2 ? GlobalData::red : GlobalData::white);
-		(*(gameOverTexts.begin() + 4))->setColor(GlobalData::currentMenuSelection == 3 ? GlobalData::red : GlobalData::white);
+		(*(pageText.begin() + 2))->setColor(GlobalData::currentMenuSelection == 1 ? GlobalData::red : GlobalData::white);
+		(*(pageText.begin() + 3))->setColor(GlobalData::currentMenuSelection == 2 ? GlobalData::red : GlobalData::white);
+		(*(pageText.begin() + 4))->setColor(GlobalData::currentMenuSelection == 3 ? GlobalData::red : GlobalData::white);
 		GlobalData::menuOptionChanged = false;
 	}
 }
 
 void GameOverPage::render()
 {
-	for (auto itr = gameOverTexts.begin(); itr != gameOverTexts.end(); itr++)
+	for (auto itr = pageText.begin(); itr != pageText.end(); itr++)
 	{
 		(*itr)->render();
 	}

@@ -1,9 +1,10 @@
 #include "WorldMap.h"
 #include "Tile.h"
+#include "GlobalData.h"
 #include <fstream>
 #include <iostream>
 
-const char* defaultMapTexture = "assets/no_barrier_map_texture.png";
+
 
 WorldMap::WorldMap()
 {
@@ -11,29 +12,72 @@ WorldMap::WorldMap()
 }
 
 
-void WorldMap::LoadWorldMap(std::string path, int tilesX, int tilesY)
+void WorldMap::LoadWorldMap(std::string& path, int tilesX, int tilesY)
 {
-	int tileY;
-	int tileX;
-	char c;
-	std::fstream mapFile;
+	int srcX;
+	std::ifstream mapFile;
 	mapFile.open(path);
-
+	std::string line;
+	int x = 0;
+	int rowCount = 0;
 	if (mapFile.is_open() == true)
 	{
-		std::cout << "Map file loaded" << std::endl;
 		for (int y = 0; y < tilesY; y++)
 		{
-			for (int x = 0; x < tilesX; x++)
+			std::getline(mapFile, line);
+			x = 0;
+			rowCount = 0;
+			for (auto c : line)
 			{
-				mapFile.get(c);
-				tileX = atoi(&c) * 32;
-				mapFile.get(c);
-				tileY = atoi(&c) * 32;
-				worldTiles.push_back(std::make_unique<Tile>(defaultMapTexture, x * 32, y * 32, tileX, tileY));
+				if (c != ',' )
+				{
+					rowCount++;
+					srcX = atoi(&c);
+					
+					worldTiles.emplace_back(std::make_unique<Tile>(GlobalData::worldMapTexture.c_str(), x * GlobalData::tileWidth, y * GlobalData::tileHeight, srcX * GlobalData::tileWidth, 0));
+					x++;
+				}
+				if (rowCount == tilesX)
+				{
+					break;
+				}
+			}
+		}
+
+
+		if (mapFile.peek() != EOF)
+		{
+			mapFile.ignore();
+			for (int y = 0; y < tilesY; y++)
+			{
+				std::getline(mapFile, line);
+				x = 0;
+				for (auto c : line)
+				{
+					if (c == '2')
+					{
+					
+						rowCount++;
+						srcX = atoi(&c);
+						
+						SDL_Rect destRect;
+						destRect.x = x * GlobalData::tileWidth;
+						destRect.y = y * GlobalData::tileHeight;
+						destRect.w = GlobalData::tileWidth;
+						destRect.h = GlobalData::tileHeight;
+						
+						collisionBoxes.emplace_back(std::make_unique<CollisionBox>(destRect));
+						
+					}
+					if(c != ',')
+					{
+						x++;
+					}		
+				}
 
 			}
 		}
+		mapFile.close();
 	}
 	else {
 		std::cout << "Couldn't open map File" << std::endl;

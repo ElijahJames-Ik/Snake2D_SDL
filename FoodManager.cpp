@@ -1,18 +1,15 @@
 #include "FoodManager.h"
 #include "Collision.h"
+#include "GlobalData.h"
 #include<random>
 
-const int foodWidth = 16;
-const int foodHeight = 16;
 
-const int bonusWidth = 20;
-const int bonusHeight = 20;
 
 
 FoodManager::FoodManager(int width, int height, std::shared_ptr<Snake> snake)
 {
-	food = std::make_unique<SnakeFood>("assets/snake_food.png",0,0, foodWidth, foodHeight);
-	bonus = std::make_unique<BonusFood>("assets/bonusFood.png", 0, 0, bonusWidth, bonusHeight);
+	food = std::make_unique<SnakeFood>(GlobalData::snakeFoodTexture.c_str(),0,0, GlobalData::foodWidth, GlobalData::foodHeight);
+	bonus = std::make_unique<BonusFood>(GlobalData::snakeBonusFoodTexture.c_str(), 0, 0, GlobalData::bonusWidth, GlobalData::bonusHeight);
 	this->width = width;
 	this->height = height;
 	this->snake = snake;
@@ -31,9 +28,8 @@ void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, in
 {
 	if (foodPtr->isFoodEaten)
 	{
-		std::uniform_int_distribution<int> widthDistributor(0, width - (foodPtr != nullptr ? foodWidth : bonusWidth));
-		std::uniform_int_distribution<int> heightDistributor(0, height - (foodPtr != nullptr ? foodHeight : bonusHeight));
-
+		std::uniform_int_distribution<int> widthDistributor((GlobalData::currentGameMap == MapType::BOXED_IN ? GlobalData::tileWidth : 0), (width - (GlobalData::currentGameMap == MapType::BOXED_IN ? GlobalData::tileWidth : 0)) - (foodPtr != nullptr ? foodWidth : GlobalData::bonusWidth));
+		std::uniform_int_distribution<int> heightDistributor((GlobalData::currentGameMap == MapType::BOXED_IN ? GlobalData::tileHeight : 0), (height - (GlobalData::currentGameMap == MapType::BOXED_IN ? GlobalData::tileHeight : 0))- (foodPtr != nullptr ? foodHeight : GlobalData::bonusHeight));
 		std::random_device rd;
 		std::mt19937 randEng(rd());
 
@@ -84,7 +80,7 @@ void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, in
 void FoodManager::generateFood()
 {
 	
-	generate(food, foodWidth, foodHeight);
+	generate(food, GlobalData::foodWidth, GlobalData::foodHeight);
 }
 
 void FoodManager::generateBonus()
@@ -93,7 +89,7 @@ void FoodManager::generateBonus()
 	{
 		timerThread.join();
 	}
-	generate(bonus, bonusWidth, bonusHeight);
+	generate(bonus, GlobalData::bonusWidth, GlobalData::bonusHeight);
 
 	timerThread = std::thread([this]() {
 		//wait for 5 seconds before removing bonus

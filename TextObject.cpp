@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-TextObject::TextObject(std::string filePath, int fontSize, SDL_Color textColor,std::string message,int x, int y, int width, int height)
+TextObject::TextObject(std::string& filePath, int fontSize, SDL_Color textColor,std::string message,int x, int y, int width, int height)
 {
 	xPos = x;
 	yPos = y;

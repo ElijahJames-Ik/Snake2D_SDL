@@ -5,7 +5,7 @@
 class Tile : public Actor
 {
 public:
-	Tile(const char* textureSheet, int x, int y, int width, int height);
+	Tile(const char* textureSheet, int x, int y, int srcX, int srcY);
 	~Tile();
 
 	void update() override;

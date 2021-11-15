@@ -17,7 +17,7 @@ public:
 	void initActor(const char* textureSheet, int x, int y, int width, int height, bool animated,int frames, int animationSpeed);
 	Vector2D position;
 	Vector2D velocity;
-	int speed = 2;
+	int speed = 0;
 	SDL_RendererFlip flipTexture;
 	SDL_Texture* actorTexture;
 	SDL_Rect srcRect, destRect;
