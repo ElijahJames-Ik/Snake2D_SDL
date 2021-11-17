@@ -32,8 +32,6 @@ void Snake::createSnake()
 		auto body = std::make_unique<SnakeBody>(GlobalData::snakeBodyTexture.c_str(), startX, startY, GlobalData::bodyWidth, GlobalData::bodyHeight);
 		snakeBody.emplace_back(std::move(body));
 	}
-	
-
 }
 
 void Snake::addBonus(int bonus)
@@ -126,9 +124,7 @@ void Snake::updateSnakeBody()
 				isSnakeDead = true;
 				GlobalData::windowTitle = "SNAKE";
 				isTitleUpdateRequried = true;
-				
 				checKifHighscoreIsBeat();
-
 				// check if user beat any highscore
 				
 				break;

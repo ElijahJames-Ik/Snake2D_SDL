@@ -28,6 +28,7 @@ std::unique_ptr<GamePauseMenu> pausedMenu = nullptr;
 std::unique_ptr<EnterNameBox> newHighscoreBox = nullptr;
 std::vector<int> gameData;
 std::thread readGameFiles;
+std::thread loadMapData;
 
 
 
@@ -57,6 +58,10 @@ Game::~Game()
 	if (readGameFiles.joinable())
 	{
 		readGameFiles.join();
+	}
+	if (loadMapData.joinable())
+	{
+		loadMapData.join();
 	}
 	SDL_DestroyWindow(gameWindow);
 	SDL_DestroyRenderer(renderer);
@@ -157,6 +162,7 @@ void Game::update()
 							snake->snakeBody.front()->velocity.y = 0;
 							snake->isSnakeDead = true;
 							snake->checKifHighscoreIsBeat();
+						
 							break;
 
 						}
@@ -227,12 +233,18 @@ void Game::update()
 				}
 				else if ((*itr)->pageType == GamePage::HOME)
 				{
+					
 					//Load game data
 					if (GlobalData::isReLoadMapRequired)
 					{
-						background->collisionBoxes.clear();
-						background->LoadWorldMap(GlobalData::tileMapFile, 25, 20);
+						
+						loadMapData = std::thread([this]() {
+							background->LoadWorldMap(GlobalData::tileMapFile, 25, 20);
+						});
+						
+						
 						GlobalData::isReLoadMapRequired = false;
+						loadMapData.join();
 					}
 				}
 				
