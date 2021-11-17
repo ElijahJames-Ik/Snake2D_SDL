@@ -22,17 +22,19 @@ public:
 	void pauseSnake();
 	void resumeSnake();
 	void updateSnakeBody();
+	void checKifHighscoreIsBeat();
 	int getScore();
 
 	bool isSnakeDead = false;
 	bool isGamePaused = false;
 	bool isSnakeGrowing = false;
+	bool isHighScoreBeat = false;
+	bool isTitleUpdateRequried = false;
 	vector<std::unique_ptr<SnakeBody>> snakeBody;
 	vector<Vector2D> movementStack;
 	Vector2D prevVector;
 private:
 	int snakeSize;
-	int score = 0;
 	Vector2D pausedState;
 
 

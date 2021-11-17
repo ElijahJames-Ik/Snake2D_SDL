@@ -151,6 +151,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DataProvider.cpp" />
     <ClCompile Include="DifficultyPage.cpp" />
+    <ClCompile Include="EnterNameBox.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="FoodManager.cpp" />
     <ClCompile Include="GameOverPage.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DataProvider.h" />
     <ClInclude Include="DifficultyPage.h" />
+    <ClInclude Include="EnterNameBox.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="FoodManager.h" />
     <ClInclude Include="GameOverPage.h" />

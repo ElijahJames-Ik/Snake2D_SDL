@@ -16,20 +16,20 @@ GameSettingsPage::GameSettingsPage(GamePage pageType): Page(pageType)
 void GameSettingsPage::initPage()
 {
 	int height = 140;
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 40, GlobalData::white, "Game Settings", 250, height, 300, 100));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 40, GlobalData::white, "Game Settings", 270, height));
 	height += 120;
 
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Map Settings", 320, height, 150, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Map Settings", 320, height));
 
 	height += 50;
 
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Difficulty Settings", 320, height, 180, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Difficulty Settings", 320, height));
 	height += 100;
 
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press enter to confirm selection", 200, height, 500, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press enter to confirm selection", 250, height));
 	height += 50;
 
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press escape to go back to the main menu.", 200, height, 500, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press escape to go back to the main menu.", 200, height));
 	isInitialized = true;
 }
 

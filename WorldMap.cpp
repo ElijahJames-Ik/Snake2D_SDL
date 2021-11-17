@@ -14,6 +14,7 @@ WorldMap::WorldMap()
 
 void WorldMap::LoadWorldMap(std::string& path, int tilesX, int tilesY)
 {
+	worldTiles.clear();
 	int srcX;
 	std::ifstream mapFile;
 	mapFile.open(path);

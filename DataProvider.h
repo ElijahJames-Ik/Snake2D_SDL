@@ -8,6 +8,9 @@ public:
 
 	DataProvider();
 	std::vector<int> getGameData(const std::string& path, std::vector<std::string>& data);
+	std::vector<std::string> getHighscoresAsListOfStrings(const std::string& path);
+	std::vector<int> getHighscores(const std::string& path);
+
 	std::vector<std::string> highscoreData;
 	std::vector<std::string> gameData;
 	void writeData(const std::string& path, std::vector<std::string>& data);

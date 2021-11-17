@@ -1,5 +1,6 @@
 #include "GlobalData.h"
 
+std::string text = "";
 SDL_Color GlobalData::white = { 255,255,255 };
 
 SDL_Color GlobalData::red = { 255,0,0 };
@@ -14,10 +15,19 @@ int GlobalData::tileWidth = 32;
 
 int GlobalData::snakeSpeed = GlobalData::normalSpeed;
 
+int GlobalData::score = 0;
+
 bool GlobalData::menuOptionChanged = false;
 bool GlobalData::settingsChanged = false;
 bool GlobalData::isDataLoadRequired = true;
 bool GlobalData::isControllerLocked = false;
+bool GlobalData::isInputTextToBeRedrawn = false;
+bool GlobalData::isGameOver = false;
+bool GlobalData::isFoodManagerResetRequired = false;
+bool GlobalData::isHighscoreLoadRequired = false;
+bool GlobalData::isReLoadMapRequired = false;
+
+
 
 
 GamePage GlobalData::currentPage = GamePage::HOME;
@@ -30,6 +40,10 @@ std::string GlobalData::menuItemTextFont = "assets/Bullpen3D.ttf";
 std::string GlobalData::titleTextFont = "assets/StitchWarrior.ttf";
 
 std::string GlobalData::snakeBodyTexture = "assets/snake_cube.png";
+
+std::string GlobalData::windowTitle = "SNAKE";
+
+std::string  GlobalData::enteredNameTextField = ">";
 
 std::string GlobalData::snakeHeadUpTexture = "assets/snake_head_up.png";
 std::string GlobalData::snakeHeadDownTexture = "assets/snake_head_down.png";

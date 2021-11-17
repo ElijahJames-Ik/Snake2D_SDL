@@ -3,12 +3,11 @@
 #include <iostream>
 
 
-TextObject::TextObject(std::string& filePath, int fontSize, SDL_Color textColor,std::string message,int x, int y, int width, int height)
+TextObject::TextObject(std::string& filePath, int fontSize, SDL_Color textColor,std::string message,int x, int y)
 {
 	xPos = x;
 	yPos = y;
-	this->width = width;
-	this->height = height;
+	
 	this->filePath = filePath;
 	this->color = textColor;
 	this->fontSize = fontSize;
@@ -39,8 +38,8 @@ void TextObject::setText(const char* text)
 	messageTexture = TextureManager::loadTextureFromText(surfaceMessage);
 	msgRect.x = xPos;
 	msgRect.y = yPos;
-	msgRect.w = width;
-	msgRect.h = height;
+	msgRect.w = surfaceMessage->w;
+	msgRect.h = surfaceMessage->h;
 	TTF_CloseFont(fontFile);
 	SDL_FreeSurface(surfaceMessage);
 	TTF_Quit();

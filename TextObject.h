@@ -6,7 +6,7 @@
 class TextObject
 {
 public:
-	TextObject(std::string& filePath, int fontSize, SDL_Color textColor,std::string message, int x, int y, int width, int height);
+	TextObject(std::string& filePath, int fontSize, SDL_Color textColor,std::string message, int x, int y);
 	~TextObject();
 	void update();
 	void render();

@@ -13,9 +13,9 @@ GamePauseMenu::GamePauseMenu(int xPos, int yPos, int width, int height)
 	menuBackgroundRect.w = width;
 	menuBackgroundRect.h = height;
 
-	menuTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, red, "1-Resume Game", 350, 225, 100, 25));
-	menuTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, white, "2-Main Menu", 350, 255, 100, 25));
-	menuTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, white, "3-Exit", 350, 285, 100, 25));
+	menuTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, red, "Resume Game", 350, 225));
+	menuTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, white, "Main Menu", 350, 255));
+	menuTexts.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, white, "Exit", 350, 285));
 }
 
 void GamePauseMenu::render()

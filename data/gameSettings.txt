@@ -1,2 +1,2 @@
-Map=1
+Map=0
 Difficult=1

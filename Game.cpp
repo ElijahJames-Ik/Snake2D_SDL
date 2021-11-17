@@ -25,7 +25,7 @@ std::unique_ptr<Controller> controller = nullptr;
 std::unique_ptr<FoodManager> food;
 std::unique_ptr<WorldMap> background = nullptr;
 std::unique_ptr<GamePauseMenu> pausedMenu = nullptr;
-
+std::unique_ptr<EnterNameBox> newHighscoreBox = nullptr;
 std::vector<int> gameData;
 std::thread readGameFiles;
 
@@ -64,9 +64,9 @@ Game::~Game()
 }
 
 
-void showPauseMenu()
+void Game::updateWindowTitle()
 {
-
+	SDL_SetWindowTitle(gameWindow, GlobalData::windowTitle.c_str());
 }
 
 
@@ -117,20 +117,25 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height)
 }
 void Game::handleEvents()
 {
-	SDL_PollEvent(&event);
-	switch (event.type)
-	{
-	case SDL_QUIT:
-		isGameRunning = false;
-		break;
-	default:
-		break;
-	}
+
+	controller->captureInput();
+	
 }
 void Game::update()
 {
 	// capture keyboard input
-	controller->captureInput();
+	if (snake->isTitleUpdateRequried)
+	{
+		updateWindowTitle();
+		snake->isTitleUpdateRequried = false;
+	}
+	if (GlobalData::isFoodManagerResetRequired)
+	{
+		food->resetManager();
+		GlobalData::isFoodManagerResetRequired = false;
+	}
+
+	
 	if (GlobalData::currentPage == GamePage::GAME)
 	{
 		if (!snake->isSnakeDead)
@@ -151,8 +156,9 @@ void Game::update()
 							snake->snakeBody.front()->velocity.x = 0;
 							snake->snakeBody.front()->velocity.y = 0;
 							snake->isSnakeDead = true;
-							GlobalData::currentPage = GamePage::GAMEOVER;
-							GlobalData::currentMenuSelection = 1;
+							snake->checKifHighscoreIsBeat();
+							break;
+
 						}
 					}
 				}
@@ -160,17 +166,41 @@ void Game::update()
 			}
 			
 		}
+	
+		if (snake->isHighScoreBeat)
+		{
+			if (newHighscoreBox == nullptr)
+			{
+				newHighscoreBox = std::make_unique<EnterNameBox>(290, 170, 290, 250);
+			}
+			else
+			{
+				newHighscoreBox->update();
+			}
+			
+		}
+		if (GlobalData::isGameOver)
+		{
+			GlobalData::windowTitle = "SNAKE";
+			updateWindowTitle();
+			GlobalData::isGameOver = false;
+		}
+			
+			
+			
+		
 		if (snake->isGamePaused == true)
 		{
 			if (pausedMenu == nullptr)
 			{
-				pausedMenu = std::make_unique<GamePauseMenu>(300, 170, 200, 200);
+				pausedMenu = std::make_unique<GamePauseMenu>(300, 170, 250, 250);
 			}
 			else
 			{
 				pausedMenu->update();
 			}	
 		}
+		
 		
 	}
 
@@ -187,17 +217,22 @@ void Game::update()
 					std::string score = "Your Score: " + std::to_string(snake->getScore());
 					((*itr))->setItemText(score, 1, GlobalData::white);
 				}
+				else if ((*itr)->pageType == GamePage::HIGHSCORE)
+				{
+					if (GlobalData::isHighscoreLoadRequired)
+					{
+						(*itr) = std::make_unique<HighscorePage>(GamePage::HIGHSCORE);
+						GlobalData::isHighscoreLoadRequired = false;
+					}
+				}
 				else if ((*itr)->pageType == GamePage::HOME)
 				{
 					//Load game data
-					if (GlobalData::isDataLoadRequired)
+					if (GlobalData::isReLoadMapRequired)
 					{
-						auto tmpPtr = static_cast<MainMenuPage*>((*itr).get());
-						tmpPtr->loadGameData();
-						GlobalData::isDataLoadRequired = false;
-						std::cout << "Data Loaded" << std::endl;
 						background->collisionBoxes.clear();
 						background->LoadWorldMap(GlobalData::tileMapFile, 25, 20);
+						GlobalData::isReLoadMapRequired = false;
 					}
 				}
 				
@@ -207,7 +242,6 @@ void Game::update()
 				(*itr)->initPage();
 				if ((*itr)->pageType == GamePage::GAMEOVER)
 				{
-				
 					std::string score = "Your Score: " + std::to_string(snake->getScore());
 					((*itr))->setItemText(score, 1, GlobalData::white);
 				}
@@ -223,7 +257,7 @@ void Game::render()
 	SDL_RenderClear(renderer);
 	if (GlobalData::currentPage == GamePage::GAME)
 	{
-		if (!snake->isSnakeDead)
+		if (!snake->isSnakeDead || snake->isHighScoreBeat)
 		{
 			background->render();
 			snake->render();
@@ -232,7 +266,12 @@ void Game::render()
 			{
 				pausedMenu->render();
 			}
+			if (snake->isHighScoreBeat)
+			{
+				newHighscoreBox->render();
+			}
 		}
+		
 	}
 
 	for (auto itr = pages.begin(); itr != pages.end(); itr++)

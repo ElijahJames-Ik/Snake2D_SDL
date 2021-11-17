@@ -93,6 +93,9 @@
     <ClCompile Include="Page.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnterNameBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -168,6 +171,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Page.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnterNameBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

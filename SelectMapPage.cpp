@@ -19,23 +19,23 @@ void SelectMapPage::initPage()
 {
 	gameSettings = provider.getGameData(GlobalData::gameSettingsFile, provider.gameData);
 	int height = 140;
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 50, GlobalData::white, "Select Map", 250, height, 300, 100));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 50, GlobalData::white, "Select Map", 270, height));
 	height += 120;
 	
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white,"1-Open Field", 350, height, 150, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white,"1-Open Field", 350, height));
 
 	height += 50;
 
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "2-Boxed In", 350, height, 150, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "2-Boxed In", 350, height));
 	height += 50;
 
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Current Map: ", 280, height, 150, 30));
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::green, gameSettings.front() == 0 ? "Open Field" : "Boxed In", 440, height, 150, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Current Map: ", 300, height));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::green, gameSettings.front() == 0 ? "Open Field" : "Boxed In", 460, height));
 	height += 100;
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press enter to confirm selection", 200, height, 500, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press enter to confirm selection.", 250, height));
 	height += 50;
 	
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press escape to go back to the main menu.", 200, height, 500, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press escape to go back to the previous menu.", 180, height));
 	isInitialized = true;
 
 }

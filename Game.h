@@ -22,7 +22,7 @@ public:
 	void handleEvents();
 	void update();
 	void render();
-	void showPauseMenu();
+	void updateWindowTitle();
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
 	static bool isGameRunning;

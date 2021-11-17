@@ -20,7 +20,8 @@ void Snake::createSnake()
 	snakeDirection = Direction::RIGHT;
 	isSnakeDead = false;
 	isGamePaused = false;
-	score = 0;
+	isHighScoreBeat = false;
+	GlobalData::score = 0;
 	
 	snakeBody.emplace_back(std::make_unique<SnakeBody>(GlobalData::snakeHeadRightTexture.c_str(), startX, startY, GlobalData::bodyWidth, GlobalData::bodyHeight));
 	
@@ -37,14 +38,19 @@ void Snake::createSnake()
 
 void Snake::addBonus(int bonus)
 {
-	score += bonus;
+	GlobalData::score += bonus;
+	GlobalData::windowTitle = "SNAKE    SCORE: " + std::to_string(GlobalData::score);
+	isTitleUpdateRequried = true;
+	
 }
 
 // increase the snake size after eating snake food
 void Snake::growSnake()
 {
 	//isSnakeGrowing = true;
-	score += 5;
+	GlobalData::score += 5;
+	GlobalData::windowTitle = "SNAKE    SCORE: " + std::to_string(GlobalData::score);
+	isTitleUpdateRequried = true;
 	// get current snake head coordinates
 	int startX = snakeBody.front()->position.x;
 	int startY = snakeBody.front()->position.y;
@@ -74,7 +80,7 @@ void Snake::growSnake()
 
 int Snake::getScore()
 {
-	return score;
+	return GlobalData::score;
 }
 
 void Snake::pauseSnake()
@@ -98,7 +104,6 @@ void Snake::resumeSnake()
 void Snake::updateSnakeBody()
 {
 	snakeBody.front()->update();
-	std::cout << "Head" << snakeBody.front()->position.x << "--" << snakeBody.front()->position.y << std::endl;
 	for (auto itr = snakeBody.begin()+1; itr != snakeBody.end(); itr++)
 	{
 		
@@ -108,11 +113,7 @@ void Snake::updateSnakeBody()
 		{
 			if ((*itr)->position.x == (*(itr - 1))->position.x || (*itr)->position.y == (*(itr - 1))->position.y)
 			{
-				
-				
 					(*itr)->velocity = (*(itr - 1))->velocity;
-				
-					
 			}
 		}
 		if (itr > snakeBody.begin() + 2)
@@ -120,18 +121,42 @@ void Snake::updateSnakeBody()
 			if (Collision::AABB(snakeBody.front()->destRect, (*itr)->destRect) == true)
 			{
 				std::cout << "Snake is dead" << std::endl;
-				std::cout << "X:" << snakeBody.front()->position.x << "|" << (*itr)->position.x << std::endl;
-				std::cout << "Y:" << snakeBody.front()->position.y << "|" << (*itr)->position.y << std::endl;
 				(*snakeBody.begin())->velocity.x = 0;
 				(*snakeBody.begin())->velocity.y = 0;
 				isSnakeDead = true;
-				GlobalData::currentPage = GamePage::GAMEOVER;
-				GlobalData::currentMenuSelection = 1;
-				GlobalData::menuOptionChanged = true;
+				GlobalData::windowTitle = "SNAKE";
+				isTitleUpdateRequried = true;
+				
+				checKifHighscoreIsBeat();
+
+				// check if user beat any highscore
+				
 				break;
 			}
 		}
 		(*itr)->update();	
+	}
+}
+
+void Snake::checKifHighscoreIsBeat()
+{
+	DataProvider provider;
+	std::vector<int> highscoreList = provider.getHighscores(GlobalData::highscoreFile);
+
+	for (auto itr = highscoreList.begin(); itr != highscoreList.end(); itr++)
+	{
+		if (GlobalData::score > (*itr))
+		{
+			isHighScoreBeat = true;
+			break;
+		}
+	}
+	if (!isHighScoreBeat)
+	{
+		GlobalData::currentPage = GamePage::GAMEOVER;
+		GlobalData::currentMenuSelection = 1;
+		GlobalData::menuOptionChanged = true;
+		GlobalData::isGameOver = true;
 	}
 }
 

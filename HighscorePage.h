@@ -14,8 +14,11 @@ public:
 	void update() override;
 	void render() override;
 	void initPage() override;
+	void loadScores();
 private:
 	DataProvider provider;
+	std::vector<std::unique_ptr<TextObject>> highScoreTexts;
+	std::vector<std::string> highscore;
 };
 
 

@@ -28,6 +28,8 @@ private:
 	void difficultyEscapeOperation();
 	void snakeNavigation();
 	void snakePausedMenuEnterOperation();
+	void saveHighScoreOperation();
+	void handleEditBoxInput();
 	Vector2D snakeHeadLocation;
 	bool isMovementLocked = false;
 

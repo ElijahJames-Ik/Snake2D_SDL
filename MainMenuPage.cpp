@@ -15,12 +15,12 @@ MainMenuPage::MainMenuPage(GamePage pageType) : Page(pageType)
 void MainMenuPage::initPage()
 {
 	//create texts for home page
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::titleTextFont, 50, GlobalData::white, "Snake", 250, 170, 300, 100));
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::red, "New Game", 350, 270, 100, 25));
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Settings", 350, 300, 100, 25));
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "High Score", 350, 330, 100, 25));
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Exit", 350, 360, 100, 25));
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press enter to confirm selection.", 200, 450, 500, 30));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::titleTextFont, 100, GlobalData::white, "Snake", 280, 170));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::red, "New Game", 330, 300));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Settings", 330, 330));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "High Score", 330, 360));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Exit", 330, 390));
+	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press enter to confirm selection.", 230, 450));
 	GlobalData::menuOptionChanged = false;
 	isInitialized = true;
 }
@@ -47,6 +47,12 @@ void MainMenuPage::update()
 		(*(pageText.begin() + 3))->setColor(GlobalData::currentMenuSelection == 3 ? GlobalData::red : GlobalData::white);
 		(*(pageText.begin() + 4))->setColor(GlobalData::currentMenuSelection == 4 ? GlobalData::red : GlobalData::white);
 		GlobalData::menuOptionChanged = false;
+	}
+	if (GlobalData::isDataLoadRequired)
+	{
+		loadGameData();
+		GlobalData::isDataLoadRequired = false;
+		GlobalData::isReLoadMapRequired = true;
 	}
 }
 

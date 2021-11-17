@@ -24,6 +24,13 @@ FoodManager::~FoodManager()
 	
 }
 
+void FoodManager::resetManager()
+{
+	isBonusVisible = false;
+	food->isFoodEaten = true;
+	bonus->isFoodEaten = true;
+}
+
 // generate snake food
 void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, int foodHeight )
 {

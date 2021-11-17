@@ -15,6 +15,7 @@ public:
 	void generateBonus();
 	void update();
 	void render();
+	void resetManager();
 
 private:
 	void generate(std::unique_ptr<SnakeFood>& foodPtr, int foodWidth, int foodHeight);

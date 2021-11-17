@@ -39,6 +39,7 @@ void Controller::gameOverEnterOperation()
 	{
 		case 1:
 			snakePtr->createSnake();
+			GlobalData::isFoodManagerResetRequired = true;
 			GlobalData::currentPage = GamePage::GAME;
 			GlobalData::currentMenuSelection = 1;
 			GlobalData::isControllerLocked = true;
@@ -177,6 +178,7 @@ void Controller::snakeNavigation()
 						if (!snakePtr->isGamePaused)
 						{
 							GlobalData::currentMenuSelection = 1;
+							GlobalData::menuOptionChanged = true;
 							snakePtr->pauseSnake();
 							std::cout << "Game paused" << std::endl;
 							GlobalData::isControllerLocked = true;
@@ -189,7 +191,7 @@ void Controller::snakeNavigation()
 		}
 		else
 		{
-			if (snakePtr->isGamePaused)
+			if (snakePtr->isGamePaused == true)
 			{
 				menuNavigation(3);
 			}
@@ -247,7 +249,8 @@ void Controller::snakePausedMenuEnterOperation()
 			GlobalData::currentMenuSelection = 1;
 			GlobalData::menuOptionChanged = true;
 			GlobalData::isControllerLocked = true;
-			std::cout << "Goto main" << std::endl;
+			snakePtr->isTitleUpdateRequried = true;
+			GlobalData::windowTitle = "SNAKE";
 			break;
 		case 3:
 			Game::isGameRunning = false;
@@ -327,12 +330,11 @@ void Controller::menuNavigation(int menuItems)
 						{
 							changeSettingsEnterOperation();
 						}
-						else if (GlobalData::currentPage == GamePage::GAME && snakePtr->isGamePaused == true)
+						else if (GlobalData::currentPage == GamePage::GAME && snakePtr->isGamePaused )
 						{
-							std::cout << "Yes" << std::endl;
 							snakePausedMenuEnterOperation();
-							
 						}
+						
 						break;
 					default:
 						break;
@@ -424,37 +426,144 @@ void Controller::right()
 // handle game inputs
 void Controller::captureInput()
 {
-	
-	if (GlobalData::currentPage == GamePage::GAME)
+	while (SDL_PollEvent(&Game::event) != 0)
 	{
-		// Input for game window
+		if (Game::event.type == SDL_QUIT)
+		{
+			Game::isGameRunning = false;
+		}
+		else if (Game::event.type == SDL_TEXTINPUT && snakePtr->isHighScoreBeat)
+		{
+
+
+
+			if (!(SDL_GetModState() & KMOD_CTRL && (Game::event.text.text[0] == 'c' || Game::event.text.text[0] == 'C' || Game::event.text.text[0] == 'v' || Game::event.text.text[0] == 'V')))
+			{
+				if (GlobalData::enteredNameTextField.length() < 4)
+				{
+					GlobalData::enteredNameTextField += Game::event.text.text;
+					std::cout << GlobalData::enteredNameTextField << std::endl;
+					GlobalData::isInputTextToBeRedrawn = true;
+				}
+
+			}
+
+
+		}
+		else
+		{
+			if (GlobalData::currentPage == GamePage::GAME)
+			{
+				// Input for game window
+				if (!snakePtr->isSnakeDead)
+				{
+					snakeNavigation();
+				}
+				else
+				{
+					if (snakePtr->isHighScoreBeat)
+					{
+						handleEditBoxInput();
+					}
+				}
+
+			}
+			else if (GlobalData::currentPage == GamePage::HOME)
+			{
+				menuNavigation(4);
+			}
+			else if (GlobalData::currentPage == GamePage::GAMEOVER)
+			{
+				menuNavigation(3);
+			}
+			else if (GlobalData::currentPage == GamePage::HIGHSCORE)
+			{
+				menuNavigation(0);
+			}
+			else if (GlobalData::currentPage == GamePage::SETTINGS)
+			{
+				menuNavigation(2);
+			}
+			else if (GlobalData::currentPage == GamePage::MAPSETTINGS)
+			{
+				menuNavigation(2);
+			}
+			else if (GlobalData::currentPage == GamePage::DIFFICULT)
+			{
+				menuNavigation(3);
+			}
+
+		}
+	}
+
+
+
+
+	
+	
+	
+}
+
+// handle edit box input when user beats any highscore
+void Controller::handleEditBoxInput()
+{
+	if (Game::event.type == SDL_KEYDOWN)
+	{
+		if (Game::event.key.keysym.sym == SDLK_BACKSPACE && GlobalData::enteredNameTextField.length() > 0)
+		{
+			GlobalData::enteredNameTextField.pop_back();
+			GlobalData::isInputTextToBeRedrawn = true;
+			std::cout << "BackSpace" << std::endl;
+		}
+		else if (Game::event.key.keysym.sym == SDLK_RETURN)
+		{
+			saveHighScoreOperation();
+		}
+	}
+	else
+	{
+
+	}
+	
+}
+
+void Controller::saveHighScoreOperation()
+{
+	std::cout << "Yes" << "-> " << GlobalData::enteredNameTextField.length() << std::endl;
+	if (GlobalData::enteredNameTextField.length() == 4)
+	{
+		std::string username = GlobalData::enteredNameTextField.substr(1);
+		DataProvider provider;
 		
-		snakeNavigation();
+		std::vector<std::string> highscoreList = provider.getHighscoresAsListOfStrings(GlobalData::highscoreFile);
+		int count;
+		for (auto itr = highscoreList.begin(); itr != highscoreList.end(); itr++)
+		{
+		
+			size_t pos = (*itr).find("=");
+			pos++;
+			int score = std::stoi((*itr).substr(pos));
+			if (GlobalData::score > score)
+			{
+				if (itr == highscoreList.end() - 1)
+				{
+					(*itr) = GlobalData::enteredNameTextField.substr(1) + "=" + std::to_string(GlobalData::score);
+				}
+				else
+				{
+					highscoreList.insert(itr, GlobalData::enteredNameTextField.substr(1) + "=" + std::to_string(GlobalData::score));
+					highscoreList.pop_back();
+				}
+				
+				provider.writeData(GlobalData::highscoreFile, highscoreList);
+				GlobalData::isHighscoreLoadRequired = true;
+				break;
+			}
+		}
+
+		GlobalData::currentPage = GamePage::GAMEOVER;
+		GlobalData::currentMenuSelection = 1;
+		GlobalData::menuOptionChanged = true;
+		GlobalData::isGameOver = true;
 	}
-	else if (GlobalData::currentPage == GamePage::HOME)
-	{
-		menuNavigation(4);
-	}
-	else if (GlobalData::currentPage == GamePage::GAMEOVER)
-	{
-		menuNavigation(3);
-	}
-	else if (GlobalData::currentPage == GamePage::HIGHSCORE)
-	{
-		menuNavigation(0);
-	}
-	else if (GlobalData::currentPage == GamePage::SETTINGS)
-	{
-		menuNavigation(2);
-	}
-	else if (GlobalData::currentPage == GamePage::MAPSETTINGS)
-	{
-		menuNavigation(2);
-	}
-	else if (GlobalData::currentPage == GamePage::DIFFICULT)
-	{
-		menuNavigation(3);
-	}
-	
-	
 }
