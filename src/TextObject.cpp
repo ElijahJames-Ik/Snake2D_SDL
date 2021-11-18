@@ -24,36 +24,23 @@ void TextObject::setColor(SDL_Color color)
 
 void TextObject::setText(const char* text)
 {
-	std::cout << "Creating texture" << std::endl;
 	// if (messageTexture != NULL)
 	// {
 	// 	SDL_DestroyTexture(messageTexture);
 	// 	messageTexture = NULL;
 	// }
-	std::cout << "Initializing TTF" << std::endl;
 	TTF_Init();
-	std::cout << "Done inti" << std::endl;
 	TTF_Font* fontFile = TTF_OpenFont(filePath.c_str(), fontSize);
-	std::cout << "Font loaded" << std::endl;
-
-
-
 	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(fontFile, text, color);
-	std::cout << "Surface created" << std::endl;
 	messageTexture = TextureManager::loadTextureFromText(surfaceMessage);
-	std::cout << "Texture loaded" << std::endl;
 	msgRect.x = xPos;
 	msgRect.y = yPos;
 	msgRect.w = surfaceMessage->w;
 	msgRect.h = surfaceMessage->h;
-	std::cout << "Dimensions set" << std::endl;
 	SDL_FreeSurface(surfaceMessage);
-	std::cout << "Surface cleaned" << std::endl;
 	TTF_CloseFont(fontFile);
-	std::cout << "File closed" << std::endl;
 	TTF_Quit();
 
-	std::cout << "TTF existed" << std::endl;
 }
 
 TextObject::~TextObject()
