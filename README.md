@@ -1,6 +1,25 @@
 # Udacity Capstone (Snake Game)
 
-This project contains the code for my udacity capstone project
+This project contains the code for my udacity capstone project.
+The project is a snake game built in c++, the project contains 6 screens
+* Home screen.
+* Game screen.
+* Highscore screen.
+* Games settings screen.
+* map settings screen.
+* difficulty settings screen.
+
+## Rubric Pounts
+*Loops, Functions, I/O
+  *1-This can be observered through out the project
+  *2-This is addressed in DataProvider.cpp and TextObject.cpp files (line 24 -> setText(...))
+  *3-The program using the w,a,s,d,esc and enter key to navigate screen options and move the snake object.
+     This is addressed in the Controller.cpp file (line 447 captureInput())
+*Object Oriented Programming
+   *1-This can be observered in the src folder where the program components are grouped into classes.
+   *2-This can be observered in all header files in src folder.
+   *3-This can be observered in Snake.cpp (line-9), TextObject.cpp(line-6), Controller.cpp(line-8) and FoodManager.cpp(line-9)
+   *4
 <img src="snake_home.PNG"/> 
 
 <img src="open_field.PNG"/>
