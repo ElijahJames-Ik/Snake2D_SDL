@@ -1,9 +1,11 @@
 # Udacity Capstone (Snake Game)
 
 This project contains the code for my udacity capstone project
-<img src="snake_home.png"/> <img src="open_field.png"/>
+<img src="snake_home.PNG"/> 
 
-<img src="boxed_in.png"/>
+<img src="open_field.PNG"/>
+
+<img src="boxed_in.PNG"/>
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
