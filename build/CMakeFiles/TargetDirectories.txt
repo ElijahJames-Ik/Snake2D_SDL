@@ -1,3 +1,3 @@
-/home/elijah/Documents/Snake2D_SDL/build/CMakeFiles/rebuild_cache.dir
-/home/elijah/Documents/Snake2D_SDL/build/CMakeFiles/edit_cache.dir
-/home/elijah/Documents/Snake2D_SDL/build/CMakeFiles/SnakeGame.dir
+/home/elijah/udacity/Snake2D_SDL/build/CMakeFiles/rebuild_cache.dir
+/home/elijah/udacity/Snake2D_SDL/build/CMakeFiles/edit_cache.dir
+/home/elijah/udacity/Snake2D_SDL/build/CMakeFiles/SnakeGame.dir
