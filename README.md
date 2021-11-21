@@ -9,22 +9,31 @@ The project is a snake game built in c++, the project contains 6 screens
 * map settings screen.
 * difficulty settings screen.
 
-## Rubric Pounts
-*Loops, Functions, I/O
-  *1-This can be observered through out the project
-  *2-This is addressed in DataProvider.cpp and TextObject.cpp files (line 24 -> setText(...))
-  *3-The program using the w,a,s,d,esc and enter key to navigate screen options and move the snake object.
-     This is addressed in the Controller.cpp file (line 447 captureInput())
-*Object Oriented Programming
-   *1-This can be observered in the src folder where the program components are grouped into classes.
-   *2-This can be observered in all header files in src folder.
-   *3-This can be observered in Snake.cpp (line-9), TextObject.cpp(line-6), Controller.cpp(line-8) and FoodManager.cpp(line-9)
-   *4
-<img src="snake_home.PNG"/> 
-
+## Rubric Points
+* Loops, Functions, I/O
+  * 1-This can be observed through out the project.
+  * 2-This is addressed in DataProvider.cpp and TextObject.cpp files (line 24 -> setText(...)).
+  * 3-The program using the w,a,s,d,esc and enter key to navigate screen options and move the snake object.
+     This is addressed in the Controller.cpp file (line 447 captureInput()).
+* Object Oriented Programming
+   * 1-(The project uses Object Oriented Programming techniques): This can be observered in the src folder where the program components are grouped into classes.
+   * 2-(Classes use appropriate access specifiers for class members): This can be observered in all header files in src folder.
+   * 3-(Class constructors utilize member initialization lists)This can be observered in Snake.cpp (line-9), TextObject.cpp(line-6), Controller.cpp(line-8) and FoodManager.cpp(line-9).
+   * 4-(Classes abstract implementation details from their interfaces): This cam be observered in Actor.cpp and Actor.h, Snake.cpp and Snake.h, Page.cpp and Page.h, SnakeBody.h and SnakeBody.cpp.
+   * 5-(Classes encapsulate behavior): This can be observered in all classes except GlobalData.cpp.
+   * 6-(Classes follow an appropriate inheritance hierarchy): This can be observed between Actor.cpp (base class) and SnakeFood.cpp,SnakeBody.cpp and Tile.cpp.
+   * 7-(Overloaded functions allow the same function to operate on different parameters): The can be observed in TextureManager.cpp for the render function.
+ * Memory management
+   * 1-(The project makes use of references in function declarations): This is addressed in DataProvider.cpp, TextManager.cpp, WorldMap.cpp and Vector2D.cpp
+   * 2-(The project uses destructors appropriately): This is addressed in Actor.cpp and FoodManager.cpp
+   * 3-(The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.): This is observed in the project.
+   * 4-(The project follows the Rule of 5): This is addressed in Vector2D.cpp.
+   * 5-(The project uses move semantics to move data, instead of copying it, where possible): Actor.cpp (setVelocity function line-67)
+   * 6-(The project uses smart pointers instead of raw pointers): This is addressed in Snake.cpp, Game.cpp, controller.cpp, FoodManager and Page.cpp
+ * Concurrency
+   * 1-(The project uses multithreading): This is address in FoodManager.cpp (bonusTimer function line-98)
 <img src="open_field.PNG"/>
 
-<img src="boxed_in.PNG"/>
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
