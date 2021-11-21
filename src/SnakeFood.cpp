@@ -12,10 +12,22 @@ SnakeFood::~SnakeFood()
 
 void SnakeFood::update()
 {
-	destRect.x = position.x;
-	destRect.y = position.y;
+	setDestRectX( getPosition().x);
+	setDestRectY(getPosition().y);
 }
+
+bool SnakeFood::getFoodState()
+{
+	return isFoodEaten;
+}
+
+void SnakeFood::setFoodState(bool state)
+{
+	isFoodEaten = state;
+}
+
+
 void SnakeFood::render() 
 {
-	TextureManager::render(actorTexture, destRect, flipTexture);
+	TextureManager::render(getActorTexture(), getDestRect(), getFlipTexture());
 }

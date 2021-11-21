@@ -10,5 +10,8 @@ public:
 	~SnakeFood();
 	void update() override;
 	void render() override;
+	bool getFoodState();
+	void setFoodState(bool state);
+private:
 	bool isFoodEaten = true;
 };

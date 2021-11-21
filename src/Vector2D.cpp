@@ -12,6 +12,32 @@ Vector2D::Vector2D(int x, int y)
 	this->y = y;
 }
 
+Vector2D::Vector2D(const Vector2D& vector): x(vector.x), y(vector.y)
+{
+}
+
+Vector2D::Vector2D(Vector2D&& vector)noexcept
+{
+	*this = vector;
+}
+
+Vector2D& Vector2D::operator=(const Vector2D& vector)
+{
+	if (this == &vector)
+		return *this;
+	x = vector.x;
+	y = vector.y;
+	return *this;
+}
+
+Vector2D& Vector2D::operator=(Vector2D&& vector)noexcept
+{
+	this->x = vector.x;
+	this->y = vector.y;
+
+	return *this;
+}
+
 Vector2D& Vector2D::add(const Vector2D& vector)
 {
 	x += vector.x;

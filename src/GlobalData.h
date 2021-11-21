@@ -59,10 +59,4 @@ public:
 	static int hardSpeed;
 	static int bodyWidth;
 	static int bodyHeight;
-	
-	
-	
-
-	
-
 };

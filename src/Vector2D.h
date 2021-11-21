@@ -3,8 +3,12 @@
 class Vector2D
 {
 public:
-	Vector2D();
+	Vector2D();	// default constructor
 	Vector2D(int x, int y);
+	Vector2D(const Vector2D& vector); // copy constructor
+	Vector2D(Vector2D&& vector) noexcept; // move constructor
+	Vector2D& operator=(const Vector2D& vector); // copy assignment
+	Vector2D& operator=(Vector2D&& vector) noexcept; // move assignment
 	Vector2D& add(const Vector2D& vector);
 	Vector2D& substract(const Vector2D& vec);
 

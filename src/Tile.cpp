@@ -5,16 +5,15 @@
 
 Tile::Tile(const char* textureSheet, int x, int y, int srcX, int srcY) : Actor(textureSheet, x, y, srcX, srcY)
 {
-	velocity.x = 0;
-	velocity.y = 0;
-	srcRect.h = GlobalData::tileHeight;
-	srcRect.w = GlobalData::tileWidth;
-	srcRect.x = srcX;
-	srcRect.y = srcY;
-	destRect.w = GlobalData::tileWidth;
-	destRect.h = GlobalData::tileHeight;
-	destRect.x = x,
-	destRect.y = y;
+	setVelocity(Vector2D());
+	setSrcRectH(GlobalData::tileHeight);
+	setSrcRectW(GlobalData::tileWidth);
+	setSrcRectX(srcX);
+	setSrcRectY(srcY);
+	setDestRectW(GlobalData::tileWidth);
+	setDestRectH(GlobalData::tileHeight);
+	setDestRectX(x),
+	setDestRectY(y);
 }
 Tile::~Tile()
 {
@@ -27,5 +26,5 @@ void Tile::update()
 }
 void Tile::render()
 {
-	TextureManager::render(actorTexture, srcRect, destRect, flipTexture);
+	TextureManager::render(getActorTexture(), getSrcRect(), getDestRect(), getFlipTexture());
 }

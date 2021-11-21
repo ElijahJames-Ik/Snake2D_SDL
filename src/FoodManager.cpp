@@ -1,17 +1,15 @@
 #include "FoodManager.h"
 #include "Collision.h"
-#include <random>
+#include "GlobalData.h"
+#include<random>
 
 
 
 
-FoodManager::FoodManager(int width, int height, std::shared_ptr<Snake> snake)
+FoodManager::FoodManager(int width, int height, std::shared_ptr<Snake> snake): width(width),height(height),snake(snake)
 {
 	food = std::make_unique<SnakeFood>(GlobalData::snakeFoodTexture.c_str(),0,0, GlobalData::foodWidth, GlobalData::foodHeight);
 	bonus = std::make_unique<BonusFood>(GlobalData::snakeBonusFoodTexture.c_str(), 0, 0, GlobalData::bonusWidth, GlobalData::bonusHeight);
-	this->width = width;
-	this->height = height;
-	this->snake = snake;
 }
 
 FoodManager::~FoodManager()
@@ -26,14 +24,14 @@ FoodManager::~FoodManager()
 void FoodManager::resetManager()
 {
 	isBonusVisible = false;
-	food->isFoodEaten = true;
-	bonus->isFoodEaten = true;
+	food->setFoodState(true);
+	bonus->setFoodState(true);
 }
 
 // generate snake food
 void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, int foodHeight )
 {
-	if (foodPtr->isFoodEaten)
+	if (foodPtr->getFoodState())
 	{
 		std::uniform_int_distribution<int> widthDistributor((GlobalData::currentGameMap == MapType::BOXED_IN ? GlobalData::tileWidth : 0), (width - (GlobalData::currentGameMap == MapType::BOXED_IN ? GlobalData::tileWidth : 0)) - (foodPtr != nullptr ? foodWidth : GlobalData::bonusWidth));
 		std::uniform_int_distribution<int> heightDistributor((GlobalData::currentGameMap == MapType::BOXED_IN ? GlobalData::tileHeight : 0), (height - (GlobalData::currentGameMap == MapType::BOXED_IN ? GlobalData::tileHeight : 0))- (foodPtr != nullptr ? foodHeight : GlobalData::bonusHeight));
@@ -48,21 +46,17 @@ void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, in
 			SDL_Rect newPosition;
 			newPosition.x = positionX;
 			newPosition.y = positionY;
-			newPosition.w =  foodPtr->width;
-			newPosition.h =  foodPtr->height;
+			newPosition.w =  foodPtr->getWidth();
+			newPosition.h =  foodPtr->getHeight();
 			bool collision = false;
-			for (auto itr = snake->snakeBody.begin(); itr != snake->snakeBody.end(); itr++)
+			// check if new food location collides with snake body.
+			if (snake->checkIfFoodNewLocationCollidesWithSnakeBody(newPosition))
 			{
-				// check if new food location collides with snake body
-				if (Collision::AABB((*itr)->destRect, newPosition) == true)
-				{
-					collision = true;
-					break;
-				}
+				collision = true;
 			}
-			if (foodPtr->isAnimated)
+			if (foodPtr->getAnimationState())
 			{
-				if (Collision::AABB(foodPtr->destRect, food->destRect))
+				if (Collision::CheckForCollision(foodPtr->getDestRect(), food->getDestRect()))
 				{
 					collision = true;
 				}
@@ -73,9 +67,9 @@ void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, in
 				continue;
 			}
 	
-			foodPtr->position.x = positionX;
-			foodPtr->position.y = positionY;
-			foodPtr->isFoodEaten = false;
+			foodPtr->getPosition().x = positionX;
+			foodPtr->getPosition().y = positionY;
+			foodPtr->setFoodState(false);
 			foodPtr->update();
 			
 			break;
@@ -89,44 +83,72 @@ void FoodManager::generate(std::unique_ptr<SnakeFood>& foodPtr,int foodWidth, in
 void FoodManager::generateFood()
 {
 	generate(food, GlobalData::foodWidth, GlobalData::foodHeight);
+	bonusTimer(1);
 }
 
 // generate snake bonus food
 void FoodManager::generateBonus()
 {
-	if (timerThread.joinable())
-	{
-		timerThread.join();
-	}
+	
 	generate(bonus, GlobalData::bonusWidth, GlobalData::bonusHeight);
 
-	timerThread = std::thread([this]() {
-		//wait for 5 seconds before removing bonus
-		std::this_thread::sleep_for(std::chrono::seconds(5));
-		
-			isBonusVisible = false;
-		});
+	
+
+	//timerThread = std::thread([this]() {
+	//	//wait for 5 seconds before removing bonus
+	//	std::this_thread::sleep_for(std::chrono::seconds(5));
+	//	
+	//		isBonusVisible = false;
+	//	});
 }
 
+
+// bonus timer
+void FoodManager::bonusTimer(unsigned int interval)
+{
+	if (timerThread.joinable())
+	{
+		timerThread.detach();
+	}
+	timerThread =	std::thread([interval,this]() {
+			while (isBonusVisible)
+			{
+				if (bonusSeconds == 5)
+				{
+					isBonusVisible = false;
+					bonusSeconds = 0;
+					break;
+				}
+				else
+				{
+					if (!snake->getGamePausedState())
+					{
+						bonusSeconds++;
+					}
+				}
+				std::this_thread::sleep_for(std::chrono::seconds(interval));
+				std::cout << bonusSeconds << std::endl;
+			}
+		
+		});
+}
 
 
 void FoodManager::update()
 {
 	//check if snake head collides with snake food.
-	if (Collision::AABB(snake->snakeBody.front()->destRect, food->destRect) == true)
+	if (snake->checkIfSnakeFoodIsEaten(food))
 	{
-		food->isFoodEaten = true;
-		snake->growSnake();
 		currentCount++;
-		std::cout << "Snake Food Eaten" << std::endl;
 	}
 	// check if snake head collides with snake bonus when it's visible
-	if (Collision::AABB(snake->snakeBody.front()->destRect, bonus->destRect) == true && isBonusVisible)
+	if (isBonusVisible)
 	{
-		bonus->isFoodEaten = true;
-		isBonusVisible = false;
-		snake->addBonus(50);
-		std::cout << "Bonus Eaten" << std::endl;
+		if (snake->checkIfBonusFoodIsEaten(bonus))
+		{
+			timerThread.detach();
+			isBonusVisible = false;
+		}
 	}
 	if (currentCount == bonusReqCount)
 	{
@@ -135,7 +157,7 @@ void FoodManager::update()
 		currentCount = 0;
 		generateBonus();
 	}
-	if (food->isFoodEaten)
+	if (food->getFoodState())
 	{
 		generateFood();
 	}

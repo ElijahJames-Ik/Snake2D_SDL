@@ -36,8 +36,11 @@ private:
 	std::unique_ptr<GameSettingsPage> gameSettingsPagePtr;
 	std::unique_ptr<SelectMapPage> selectMapPagePtr;
 	std::unique_ptr<DifficultyPage> difficultyPagePtr;*/
-	
+	std::unique_ptr<EnterNameBox> newHighscoreBox = nullptr;
 	std::vector<std::unique_ptr<Page>> pages;
+	std::vector<int> gameData;
+
+	std::thread loadMapData;
 
 	
 };

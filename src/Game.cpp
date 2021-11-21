@@ -5,8 +5,6 @@
 #include "WorldMap.h"
 #include "TextObject.h"
 #include <string>
-#include <thread>
-#include <future>
 #include "Controller.h"
 #include "GamePauseMenu.h"
 #include "Collision.h"
@@ -25,10 +23,7 @@ std::unique_ptr<Controller> controller = nullptr;
 std::unique_ptr<FoodManager> food;
 std::unique_ptr<WorldMap> background = nullptr;
 std::unique_ptr<GamePauseMenu> pausedMenu = nullptr;
-std::unique_ptr<EnterNameBox> newHighscoreBox = nullptr;
-std::vector<int> gameData;
-std::thread readGameFiles;
-std::thread loadMapData;
+
 
 
 
@@ -55,10 +50,7 @@ Game::Game()
 
 Game::~Game()
 {
-	if (readGameFiles.joinable())
-	{
-		readGameFiles.join();
-	}
+	
 	if (loadMapData.joinable())
 	{
 		loadMapData.join();
@@ -98,23 +90,15 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height)
 
 		isGameRunning = true;
 		// read game settings from file
-		readGameFiles = std::thread([this]() {
-
-			DataProvider provider;
-			gameData = provider.getGameData(GlobalData::gameSettingsFile, provider.gameData);	
-		});
+		
 		// create snake of length 5
 		snake = std::make_shared<Snake>(5);
 		food = std::make_unique<FoodManager>(Game::windowWidth, Game::windowHeight, snake);
-		std::cout << "Snake object created" << std::endl;
+		std::cout << "Snake created" << std::endl;
 		// create background map
 		background = std::make_unique<WorldMap>();
-		std::cout << "Next" << std::endl;
-		readGameFiles.join();
-		std::cout << "After" << std::endl;
-		controller = std::make_unique<Controller>(snake);
 		
-		std::cout << "Initialization Complete" << std::endl;
+		controller = std::make_unique<Controller>(snake);
 		pages.front()->initPage();
 				
 	}
@@ -133,10 +117,10 @@ void Game::handleEvents()
 void Game::update()
 {
 	// capture keyboard input
-	if (snake->isTitleUpdateRequried)
+	if (snake->getTitleUpdateState())
 	{
 		updateWindowTitle();
-		snake->isTitleUpdateRequried = false;
+		snake->setTitleUpdateState(false);
 	}
 	if (GlobalData::isFoodManagerResetRequired)
 	{
@@ -147,37 +131,16 @@ void Game::update()
 	
 	if (GlobalData::currentPage == GamePage::GAME)
 	{
-		if (!snake->isSnakeDead)
+		if (!snake->getSnakeState())
 		{
 			snake->update();
 			food->update();
-			// check if snake head collides with the map if it's boxed in
-			if (GlobalData::currentGameMap == MapType::BOXED_IN)
-			{
-				if (background->collisionBoxes.size() > 0 && !snake->isSnakeDead)
-				{
-					for (auto itr = background->collisionBoxes.begin(); itr != background->collisionBoxes.end(); itr++)
-					{
-						if (Collision::AABB(snake->snakeBody.front()->destRect, (*itr)->destRect) == true)
-						{
-							std::cout << "Snake is dead" << std::endl;
-							std::cout << (*itr)->destRect.x << std::endl;
-							snake->snakeBody.front()->velocity.x = 0;
-							snake->snakeBody.front()->velocity.y = 0;
-							snake->isSnakeDead = true;
-							snake->checKifHighscoreIsBeat();
-						
-							break;
-
-						}
-					}
-				}
-
-			}
+			// check if snake head collides with the map if it's boxed in map is choose as the game map
+			snake->checkIfSnakeCollidiesWithBoxedInMap(background);
 			
 		}
 	
-		if (snake->isHighScoreBeat)
+		if (snake->getHighScoreBeatState())
 		{
 			if (newHighscoreBox == nullptr)
 			{
@@ -199,14 +162,11 @@ void Game::update()
 			
 			
 		
-		if (snake->isGamePaused == true)
+		if (snake->getGamePausedState())
 		{
-			std::cout<<"Is Paused hit in game file"<< std::endl;
 			if (pausedMenu == nullptr)
 			{
-				std::cout<<"Creating"<< std::endl;
 				pausedMenu = std::make_unique<GamePauseMenu>(300, 170, 250, 250);
-				std::cout<<"Created paused Screen"<< std::endl;
 			}
 			else
 			{
@@ -220,17 +180,17 @@ void Game::update()
 	for (auto itr = pages.begin(); itr != pages.end(); itr++)
 	{
 		// update current screen
-		if ((*itr)->pageType == GlobalData::currentPage)
+		if ((*itr)->getPageType() == GlobalData::currentPage)
 		{
-			if ((*itr)->isInitialized)
+			if ((*itr)->getInitializationState())
 			{
 				(*itr)->update();
-				if ((*itr)->pageType == GamePage::GAMEOVER)
+				if ((*itr)->getPageType() == GamePage::GAMEOVER)
 				{
 					std::string score = "Your Score: " + std::to_string(snake->getScore());
 					((*itr))->setItemText(score, 1, GlobalData::white);
 				}
-				else if ((*itr)->pageType == GamePage::HIGHSCORE)
+				else if ((*itr)->getPageType() == GamePage::HIGHSCORE)
 				{
 					if (GlobalData::isHighscoreLoadRequired)
 					{
@@ -238,7 +198,7 @@ void Game::update()
 						GlobalData::isHighscoreLoadRequired = false;
 					}
 				}
-				else if ((*itr)->pageType == GamePage::HOME)
+				else if ((*itr)->getPageType() == GamePage::HOME)
 				{
 					
 					//Load game data
@@ -259,7 +219,7 @@ void Game::update()
 			else
 			{
 				(*itr)->initPage();
-				if ((*itr)->pageType == GamePage::GAMEOVER)
+				if ((*itr)->getPageType() == GamePage::GAMEOVER)
 				{
 					std::string score = "Your Score: " + std::to_string(snake->getScore());
 					((*itr))->setItemText(score, 1, GlobalData::white);
@@ -276,16 +236,16 @@ void Game::render()
 	SDL_RenderClear(renderer);
 	if (GlobalData::currentPage == GamePage::GAME)
 	{
-		if (!snake->isSnakeDead || snake->isHighScoreBeat)
+		if (!snake->getSnakeState() || snake->getHighScoreBeatState())
 		{
 			background->render();
 			snake->render();
 			food->render();
-			if (snake->isGamePaused == true && pausedMenu != nullptr)
+			if (snake->getGamePausedState() == true && pausedMenu != nullptr)
 			{
 				pausedMenu->render();
 			}
-			if (snake->isHighScoreBeat)
+			if (snake->getHighScoreBeatState())
 			{
 				newHighscoreBox->render();
 			}
@@ -295,9 +255,9 @@ void Game::render()
 
 	for (auto itr = pages.begin(); itr != pages.end(); itr++)
 	{
-		if ((*itr)->pageType == GlobalData::currentPage)
+		if ((*itr)->getPageType() == GlobalData::currentPage)
 		{
-			if ((*itr)->isInitialized)
+			if ((*itr)->getInitializationState())
 			{
 				(*itr)->render();
 				break;

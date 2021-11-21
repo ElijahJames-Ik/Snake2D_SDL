@@ -17,8 +17,7 @@ public:
 	void loadScores();
 private:
 	DataProvider provider;
-	std::vector<std::unique_ptr<TextObject>> highScoreTexts;
-	std::vector<std::string> highscore;
+	std::vector<std::string> highscores;
 };
 
 

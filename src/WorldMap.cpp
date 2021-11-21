@@ -8,7 +8,7 @@
 
 WorldMap::WorldMap()
 {
-	std::cout << "WorldMap object created" << std::endl;
+
 }
 
 WorldMap::~WorldMap()
@@ -20,7 +20,7 @@ WorldMap::~WorldMap()
 void WorldMap::LoadWorldMap(std::string& path, int tilesX, int tilesY)
 {
 
-			std::cout << "Loading map data started" << std::endl;
+		
 			worldTiles.clear();
 			collisionBoxes.clear();
 			int srcX;
@@ -42,7 +42,7 @@ void WorldMap::LoadWorldMap(std::string& path, int tilesX, int tilesY)
 						{
 							rowCount++;
 							srcX = atoi(&c);
-
+							// Add new tile to world tile vector
 							worldTiles.emplace_back(std::make_unique<Tile>(GlobalData::worldMapTexture.c_str(), x * GlobalData::tileWidth, y * GlobalData::tileHeight, srcX * GlobalData::tileWidth, 0));
 							x++;
 						}
@@ -57,7 +57,7 @@ void WorldMap::LoadWorldMap(std::string& path, int tilesX, int tilesY)
 				if (mapFile.peek() != EOF)
 				{
 					mapFile.ignore();
-					// Loaded collision locations on map
+					// Loaded collision locations for map
 					for (int y = 0; y < tilesY; y++)
 					{
 						std::getline(mapFile, line);
@@ -88,12 +88,16 @@ void WorldMap::LoadWorldMap(std::string& path, int tilesX, int tilesY)
 					}
 				}
 				mapFile.close();
-				std::cout << "Loading map data complete" << std::endl;
 			}
 			else {
 				std::cout << "Couldn't open map File" << std::endl;
 			}
 
+}
+
+std::vector<std::shared_ptr<CollisionBox>>& WorldMap::getCollisionBoxesList()
+{
+	return collisionBoxes;
 }
 
 void WorldMap::render()

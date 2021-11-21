@@ -5,7 +5,7 @@
 
 SnakeBody::SnakeBody(const char* textureSheet, int x, int y, int width, int height) : Actor(textureSheet,x,y,width,height)
 {
-	speed = GlobalData::snakeSpeed;
+	setSpeed(GlobalData::snakeSpeed);
 }
 SnakeBody::~SnakeBody()
 {
@@ -15,44 +15,41 @@ SnakeBody::~SnakeBody()
 //update snake body part location
 void SnakeBody::update()
 {
-	position.x += velocity.x * speed;
-	position.y += velocity.y * speed;
+	setPositionX(getPosition().x + (getVelocity().x * getSpeed()));
+	setPositionY(getPosition().y + (getVelocity().y * getSpeed()));
 
-	if (position.x > Game::windowWidth)
+	if (getPosition().x > Game::windowWidth)
 	{
-		position.x = 0;
+		setPositionX(0);
 	}
-	if (position.x < 0)
+	if (getPosition().x < 0)
 	{
-		position.x = Game::windowWidth - GlobalData::bodyWidth;
+		setPositionX(Game::windowWidth - GlobalData::bodyWidth);
 	}
-	if (position.y > Game::windowHeight)
+	if (getPosition().y > Game::windowHeight)
 	{
-		position.y = 0;
+		setPositionY(0);
 	}
-	if (position.y < 0)
+	if (getPosition().y < 0)
 	{
-		position.y = Game::windowHeight - GlobalData::bodyHeight;
+		setPositionY(Game::windowHeight - GlobalData::bodyHeight);
 	}
-
-
-
-	destRect.x = position.x;
-	destRect.y = position.y;
-
-	
+	setDestRectX(getPosition().x);
+	setDestRectY(getPosition().y);
 }
 void SnakeBody::render() {
-	TextureManager::render(actorTexture, destRect, flipTexture);
+	auto dest = getDestRect();
+
+	TextureManager::render(getActorTexture(), getDestRect(), getFlipTexture());
 }
 
 void SnakeBody::pauseMovement()
 {
-	pausedState = velocity;
-	velocity = Vector2D();
+	pausedState = getVelocity();
+	setVelocity(Vector2D());
 }
 
 void SnakeBody::resumeMovement()
 {
-	velocity = pausedState;
+	setVelocity(pausedState);
 }

@@ -5,6 +5,7 @@
 class Collision
 {
 public:
-	static bool AABB(const SDL_Rect& objectA, const SDL_Rect& objectB);
+	// Checks if there is collision between two object
+	static bool CheckForCollision(const SDL_Rect& objectA, const SDL_Rect& objectB);
 
 };

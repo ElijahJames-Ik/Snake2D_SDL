@@ -1,15 +1,12 @@
 #include "Controller.h"
 #include "GlobalData.h"
+#include "Collision.h"
 #include <thread>
-#include <iostream>
 
 
 
-Controller::Controller(std::shared_ptr<Snake> snakePtr)
+Controller::Controller(std::shared_ptr<Snake> snakePtr): snakePtr(snakePtr)
 {
-	std::cout << "Creating controller object" << std::endl;
-	this->snakePtr = snakePtr;
-	std::cout << "Controller object created" << std::endl;
 }
 
 Controller::~Controller()
@@ -17,23 +14,7 @@ Controller::~Controller()
 	
 }
 
-//Change snake head direction
-void Controller::moveSnake(const char* texture,int x, int y, const char* directionStr, Direction direction)
-{
-	
-	if (snakeHeadLocation != snakePtr->snakeBody.front()->position)
-	{
-		snakeHeadLocation = snakePtr->snakeBody.front()->position;
-		snakePtr->snakeBody.front()->setTexture(texture);
-		//snakePtr->prevDirection = snakePtr->snakeDirection;
-		//snakePtr->prevVector = snakePtr->snakeBody.front()->velocity;
-		snakePtr->snakeDirection = direction;
-		snakePtr->snakeBody.front()->velocity.x = x;
-		snakePtr->snakeBody.front()->velocity.y = y;
-		snakePtr->movementStack.emplace_back(Vector2D(x,y));	
-	}
-	
-}
+
 
 // handles enter key operation for gameover screen
 void Controller::gameOverEnterOperation()
@@ -155,7 +136,7 @@ void Controller::changeSettingsEscapeOperation()
 // handles snake movement
 void Controller::snakeNavigation()
 {
-		if (!snakePtr->isSnakeDead && !snakePtr->isGamePaused)
+		if (!snakePtr->getSnakeState() && !snakePtr->getGamePausedState())
 		{
 			if (Game::event.type == SDL_KEYDOWN)
 			{
@@ -178,7 +159,7 @@ void Controller::snakeNavigation()
 						GlobalData::isControllerLocked = true;
 						break;
 					case SDLK_ESCAPE:
-						if (!snakePtr->isGamePaused)
+						if (!snakePtr->getGamePausedState())
 						{
 							GlobalData::currentMenuSelection = 1;
 							GlobalData::menuOptionChanged = true;
@@ -194,7 +175,7 @@ void Controller::snakeNavigation()
 		}
 		else
 		{
-			if (snakePtr->isGamePaused == true)
+			if (snakePtr->getGamePausedState())
 			{
 				menuNavigation(3);
 			}
@@ -252,7 +233,7 @@ void Controller::snakePausedMenuEnterOperation()
 			GlobalData::currentMenuSelection = 1;
 			GlobalData::menuOptionChanged = true;
 			GlobalData::isControllerLocked = true;
-			snakePtr->isTitleUpdateRequried = true;
+			snakePtr->setTitleUpdateState(true);
 			GlobalData::windowTitle = "SNAKE";
 			break;
 		case 3:
@@ -333,7 +314,7 @@ void Controller::menuNavigation(int menuItems)
 						{
 							changeSettingsEnterOperation();
 						}
-						else if (GlobalData::currentPage == GamePage::GAME && snakePtr->isGamePaused )
+						else if (GlobalData::currentPage == GamePage::GAME && snakePtr->getGamePausedState())
 						{
 							snakePausedMenuEnterOperation();
 						}
@@ -377,53 +358,28 @@ void Controller::menuNavigation(int menuItems)
 void Controller::up()
 {
 	//Change snake direction to up if the conditions are met
-	if (snakePtr->snakeDirection == Direction::LEFT || snakePtr->snakeDirection == Direction::RIGHT ) {
-		if (snakePtr->snakeBody.front()->position.y == snakePtr->snakeBody.at(1)->position.y)
-		{
-			moveSnake(GlobalData::snakeHeadUpTexture.c_str(), 0, -1, "UP", Direction::UP);
-			
-		}
-		
-	}
+	snakePtr->moveSnake(GlobalData::snakeHeadUpTexture.c_str(), 0, -1, "UP", Direction::LEFT, Direction::RIGHT, Direction::UP);
 }
 
 // change snake head direction to down
 void Controller::down()
 {
 	// Change snake head direction to down and changes snake head velocity
-	if (snakePtr->snakeDirection == Direction::LEFT || snakePtr->snakeDirection == Direction::RIGHT ) {
-		if (snakePtr->snakeBody.front()->position.y == snakePtr->snakeBody.at(1)->position.y)
-		{
-			moveSnake(GlobalData::snakeHeadDownTexture.c_str(), 0, 1, "DOWN", Direction::DOWN);
-		}
-		
-	}
+	snakePtr->moveSnake(GlobalData::snakeHeadDownTexture.c_str(), 0, 1, "DOWN", Direction::LEFT, Direction::RIGHT, Direction::DOWN);
 }
 
 // change snake head direction to left
 void Controller::left()
 {
 	// Change snake head direction to left and changes snake head velocity
-	if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN) {
-		if (snakePtr->snakeBody.front()->position.x == snakePtr->snakeBody.at(1)->position.x)
-		{
-			moveSnake(GlobalData::snakeHeadLeftTexture.c_str(), -1, 0, "LEFT", Direction::LEFT);
-		}
-		
-	}
+	snakePtr->moveSnake(GlobalData::snakeHeadLeftTexture.c_str(), -1, 0, "LEFT", Direction::UP, Direction::DOWN, Direction::LEFT);
 }
 
 // change snake head direction to right
 void Controller::right()
 {
 	// Change snake head direction to right and changes snake head velocity
-	if (snakePtr->snakeDirection == Direction::UP || snakePtr->snakeDirection == Direction::DOWN) {
-		if (snakePtr->snakeBody.front()->position.x == snakePtr->snakeBody.at(1)->position.x)
-		{
-			moveSnake(GlobalData::snakeHeadRightTexture.c_str(), 1, 0, "RIGHT", Direction::RIGHT);
-		}
-		
-	}
+	snakePtr->moveSnake(GlobalData::snakeHeadRightTexture.c_str(), 1, 0, "RIGHT", Direction::UP, Direction::DOWN, Direction::RIGHT);
 }
 
 // handle game inputs
@@ -435,7 +391,7 @@ void Controller::captureInput()
 		{
 			Game::isGameRunning = false;
 		}
-		else if (Game::event.type == SDL_TEXTINPUT && snakePtr->isHighScoreBeat)
+		else if (Game::event.type == SDL_TEXTINPUT && snakePtr->getHighScoreBeatState())
 		{
 
 
@@ -458,13 +414,13 @@ void Controller::captureInput()
 			if (GlobalData::currentPage == GamePage::GAME)
 			{
 				// Input for game window
-				if (!snakePtr->isSnakeDead)
+				if (!snakePtr->getSnakeState())
 				{
 					snakeNavigation();
 				}
 				else
 				{
-					if (snakePtr->isHighScoreBeat)
+					if (snakePtr->getHighScoreBeatState())
 					{
 						handleEditBoxInput();
 					}
@@ -514,7 +470,10 @@ void Controller::handleEditBoxInput()
 	{
 		if (Game::event.key.keysym.sym == SDLK_BACKSPACE && GlobalData::enteredNameTextField.length() > 0)
 		{
-			GlobalData::enteredNameTextField.pop_back();
+			if (GlobalData::enteredNameTextField.size() > 1)
+			{
+				GlobalData::enteredNameTextField.pop_back();
+			}
 			GlobalData::isInputTextToBeRedrawn = true;
 			std::cout << "BackSpace" << std::endl;
 		}
@@ -539,7 +498,6 @@ void Controller::saveHighScoreOperation()
 		DataProvider provider;
 		
 		std::vector<std::string> highscoreList = provider.getHighscoresAsListOfStrings(GlobalData::highscoreFile);
-		int count;
 		for (auto itr = highscoreList.begin(); itr != highscoreList.end(); itr++)
 		{
 		

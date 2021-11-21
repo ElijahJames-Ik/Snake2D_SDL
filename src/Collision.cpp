@@ -1,7 +1,7 @@
 #include "Collision.h"
 
 // check for collision between two objects
-bool Collision::AABB(const SDL_Rect& objectA, const SDL_Rect& objectB)
+bool Collision::CheckForCollision(const SDL_Rect& objectA, const SDL_Rect& objectB)
 {
 
 	// The sides of the rectangels

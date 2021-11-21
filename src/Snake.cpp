@@ -1,14 +1,15 @@
 #include "Snake.h"
 #include "Collision.h"
+#include "GlobalData.h"
 
 
 
 
 
 
-Snake::Snake(int size)
+
+Snake::Snake(int size):snakeSize(size)
 {
-	snakeSize = size;
 }
 
 void Snake::createSnake()
@@ -34,6 +35,42 @@ void Snake::createSnake()
 	}
 }
 
+bool Snake::getSnakeState()
+{
+	return isSnakeDead;
+}
+void Snake::setSnakeState(bool state)
+{
+	isSnakeDead = state;
+}
+
+bool Snake::getGamePausedState()
+{
+	return isGamePaused;
+}
+void Snake::setGamePausedState(bool state)
+{
+	isGamePaused = state;
+}
+
+bool Snake::getHighScoreBeatState()
+{
+	return isHighScoreBeat;
+}
+void Snake::setHighScoreBeatState(bool state)
+{
+	isHighScoreBeat = state;
+}
+
+bool Snake::getTitleUpdateState()
+{
+	return isTitleUpdateRequried;
+}
+void Snake::setTitleUpdateState(bool state)
+{
+	isTitleUpdateRequried = state;
+}
+
 void Snake::addBonus(int bonus)
 {
 	GlobalData::score += bonus;
@@ -45,28 +82,28 @@ void Snake::addBonus(int bonus)
 // increase the snake size after eating snake food
 void Snake::growSnake()
 {
-	//isSnakeGrowing = true;
+	
 	GlobalData::score += 5;
 	GlobalData::windowTitle = "SNAKE    SCORE: " + std::to_string(GlobalData::score);
 	isTitleUpdateRequried = true;
 	// get current snake head coordinates
-	int startX = snakeBody.front()->position.x;
-	int startY = snakeBody.front()->position.y;
+	int startX = snakeBody.front()->getPosition().x;
+	int startY = snakeBody.front()->getPosition().y;
 	
 	// move snake head object
 	switch (snakeDirection)
 	{
 		case Direction::UP:
-			snakeBody.front()->position.y += -GlobalData::bodyHeight;
+			snakeBody.front()->getPosition().y += -GlobalData::bodyHeight;
 			break;
 		case Direction::DOWN:
-			snakeBody.front()->position.y += GlobalData::bodyHeight;
+			snakeBody.front()->getPosition().y += GlobalData::bodyHeight;
 			break;
 		case Direction::LEFT:
-			snakeBody.front()->position.x += -GlobalData::bodyWidth;
+			snakeBody.front()->getPosition().x += -GlobalData::bodyWidth;
 			break;
 		case Direction::RIGHT:
-			snakeBody.front()->position.x += GlobalData::bodyWidth;
+			snakeBody.front()->getPosition().x += GlobalData::bodyWidth;
 			break;
 
 	}
@@ -101,26 +138,29 @@ void Snake::resumeSnake()
 
 void Snake::updateSnakeBody()
 {
-	snakeBody.front()->update();
-	for (auto itr = snakeBody.begin()+1; itr != snakeBody.end(); itr++)
+	for (auto itr = snakeBody.begin(); itr != snakeBody.end(); itr++)
 	{
-		
-
 		// update snakebody items based on the velocity of the previous item
-		if ((*itr)->velocity != (*(itr - 1))->velocity)
+		
+		if (itr != snakeBody.begin())
 		{
-			if ((*itr)->position.x == (*(itr - 1))->position.x || (*itr)->position.y == (*(itr - 1))->position.y)
+			
+			if ((*itr)->getVelocity() != (*(itr - 1))->getVelocity())
 			{
-					(*itr)->velocity = (*(itr - 1))->velocity;
+				if ((*itr)->getPosition().x == (*(itr - 1))->getPosition().x || (*itr)->getPosition().y == (*(itr - 1))->getPosition().y )
+				{
+						(*itr)->setVelocity((*(itr - 1))->getVelocity());	
+				}
 			}
+
 		}
-		if (itr > snakeBody.begin() + 2)
+		(*itr)->update();
+		if (itr > snakeBody.begin() + 1)
 		{
-			if (Collision::AABB(snakeBody.front()->destRect, (*itr)->destRect) == true)
+			if (Collision::CheckForCollision(snakeBody.front()->getDestRect(), (*itr)->getDestRect()) == true)
 			{
 				std::cout << "Snake is dead" << std::endl;
-				(*snakeBody.begin())->velocity.x = 0;
-				(*snakeBody.begin())->velocity.y = 0;
+				(*snakeBody.begin())->setVelocity(Vector2D());
 				isSnakeDead = true;
 				GlobalData::windowTitle = "SNAKE";
 				isTitleUpdateRequried = true;
@@ -130,7 +170,7 @@ void Snake::updateSnakeBody()
 				break;
 			}
 		}
-		(*itr)->update();	
+		
 	}
 }
 
@@ -154,6 +194,91 @@ void Snake::checKifHighscoreIsBeat()
 		GlobalData::menuOptionChanged = true;
 		GlobalData::isGameOver = true;
 	}
+}
+
+void Snake::moveSnake(const char* texture, int x, int y, const char* directionStr, Direction direction, Direction oppositeDirection, Direction newDirection)
+{
+	if (snakeDirection == direction || snakeDirection == oppositeDirection) {
+		if (Collision::CheckForCollision(snakeBody.front()->getDestRect(), snakeBody.at(1)->getDestRect()) == false && snakeBody.front()->getVelocity() == snakeBody.at(1)->getVelocity())
+		{
+			std::cout << directionStr << std::endl;
+			if (snakeHeadLocation != snakeBody.front()->getPosition() )
+			{
+				snakeHeadLocation = snakeBody.front()->getPosition();
+				snakeBody.front()->setTexture(texture);
+				previousVector = snakeBody.front()->getVelocity();
+				snakeDirection = newDirection;
+				snakeBody.front()->setVelocity(Vector2D(x, y));
+				updateSnakeBody();
+				
+			}
+		}
+	}
+
+}
+
+bool Snake::checkIfSnakeFoodIsEaten(std::unique_ptr<SnakeFood>& food)
+{
+	if (Collision::CheckForCollision(snakeBody.front()->getDestRect(), food->getDestRect()) == true)
+	{
+		food->setFoodState(true);
+		growSnake();
+		std::cout << "Snake Food Eaten" << std::endl;
+		return true;
+	}
+	return false;
+}
+
+bool Snake::checkIfBonusFoodIsEaten(std::unique_ptr<SnakeFood>& bonus)
+{
+	if (Collision::CheckForCollision(snakeBody.front()->getDestRect(), bonus->getDestRect()) == true)
+	{
+		bonus->setFoodState(true);
+		addBonus(50);
+		std::cout << "Bonus Eaten" << std::endl;
+		return true;
+	}
+	return false;
+}
+
+void Snake::checkIfSnakeCollidiesWithBoxedInMap(std::unique_ptr<WorldMap>& background)
+{
+	if (GlobalData::currentGameMap == MapType::BOXED_IN)
+	{
+		if (background->getCollisionBoxesList().size() > 0 && !getSnakeState())
+		{
+			
+			for (auto itr = background->getCollisionBoxesList().begin(); itr != background->getCollisionBoxesList().end(); itr++)
+			{
+				if (Collision::CheckForCollision(snakeBody.front()->getDestRect(), (*itr)->getDestRect()) == true)
+				{
+					std::cout << "Snake is dead" << std::endl;
+					std::cout << (*itr)->getDestRect().x << std::endl;
+					snakeBody.front()->getVelocity().x = 0;
+					snakeBody.front()->getVelocity().y = 0;
+					setSnakeState(true);
+					checKifHighscoreIsBeat();
+
+					break;
+
+				}
+			}
+		}
+
+	}
+}
+
+bool Snake::checkIfFoodNewLocationCollidesWithSnakeBody(SDL_Rect newPosition)
+{
+	for (auto itr = snakeBody.begin(); itr != snakeBody.end(); itr++)
+	{
+		// check if new food location collides with snake body
+		if (Collision::CheckForCollision((*itr)->getDestRect(), newPosition) == true)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void Snake::update()

@@ -19,24 +19,24 @@ void SelectMapPage::initPage()
 {
 	gameSettings = provider.getGameData(GlobalData::gameSettingsFile, provider.gameData);
 	int height = 140;
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 50, GlobalData::white, "Select Map", 270, height));
+	addPageText(std::make_shared<TextObject>(GlobalData::menuItemTextFont, 50, GlobalData::white, "Select Map", 270, height));
 	height += 120;
 	
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white,"1-Open Field", 350, height));
+	addPageText(std::make_shared<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white,"1-Open Field", 350, height));
 
 	height += 50;
 
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "2-Boxed In", 350, height));
+	addPageText(std::make_shared<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "2-Boxed In", 350, height));
 	height += 50;
 
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Current Map: ", 300, height));
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::green, gameSettings.front() == 0 ? "Open Field" : "Boxed In", 460, height));
+	addPageText(std::make_shared<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Current Map: ", 300, height));
+	addPageText(std::make_shared<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::green, gameSettings.front() == 0 ? "Open Field" : "Boxed In", 460, height));
 	height += 100;
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press enter to confirm selection.", 250, height));
+	addPageText(std::make_shared<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press enter to confirm selection.", 250, height));
 	height += 50;
 	
-	pageText.emplace_back(std::make_unique<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press escape to go back to the previous menu.", 180, height));
-	isInitialized = true;
+	addPageText(std::make_shared<TextObject>(GlobalData::menuItemTextFont, 20, GlobalData::white, "Press escape to go back to the previous menu.", 180, height));
+	setInitializationState(true);
 
 }
 
@@ -44,8 +44,8 @@ void SelectMapPage::update()
 {
 	if (GlobalData::menuOptionChanged == true)
 	{
-		(*(pageText.begin() + 1))->setColor(GlobalData::currentMenuSelection == 1 ? GlobalData::red : GlobalData::white);
-		(*(pageText.begin() + 2))->setColor(GlobalData::currentMenuSelection == 2 ? GlobalData::red : GlobalData::white);
+		(*(getPageTextList().begin() + 1))->setColor(GlobalData::currentMenuSelection == 1 ? GlobalData::red : GlobalData::white);
+		(*(getPageTextList().begin() + 2))->setColor(GlobalData::currentMenuSelection == 2 ? GlobalData::red : GlobalData::white);
 
 		GlobalData::menuOptionChanged = false;
 	}
@@ -70,7 +70,7 @@ void SelectMapPage::update()
 
 void SelectMapPage::render()
 {
-	for (auto itr = pageText.begin(); itr != pageText.end(); itr++)
+	for (auto itr = getPageTextList().begin(); itr != getPageTextList().end(); itr++)
 	{
 		(*itr)->render();
 	}
