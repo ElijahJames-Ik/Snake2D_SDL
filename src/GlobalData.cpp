@@ -62,8 +62,8 @@ std::string GlobalData::snakeHeadRightTexture = "assets/snake_head_right.png";
 std::string GlobalData::snakeFoodTexture = "assets/snake_food.png";
 std::string GlobalData::snakeBonusFoodTexture = "assets/bonusFood.png";
 
-std::string GlobalData::highscoreFile = "data/highscore.txt";
-std::string GlobalData::gameSettingsFile = "data/gameSettings.txt";
+std::string GlobalData::highscoreFile = "highscore.txt";
+std::string GlobalData::gameSettingsFile = "gameSettings.txt";
 
 std::string GlobalData::openFieldTexture = "assets/no_barrier_map_texture.png";
 std::string GlobalData::openFileMapFile = "assets/defaultMap.map";
